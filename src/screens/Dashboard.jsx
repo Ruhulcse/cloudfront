@@ -5,7 +5,14 @@ function Dashboard() {
 
     let data = JSON.parse(localStorage.getItem('user'))
     let userType = data.role;
+    let userName = data.name;
     console.log(userType)
+
+    const  logoutHandler =() => {
+        console.log("clicked")
+        localStorage.clear();
+        window.location.href = '/';
+    }
     return (
         <div  className="container-fluid">
         <nav className="navbar navbar-expand-md navbar-light bg-light">
@@ -22,24 +29,25 @@ function Dashboard() {
                         <a className="nav-link" href="!#">Show Data</a>
                     </li>
                    {(userType==='admin')&&(
-                      <div>
                          <li className="nav-item">
                            <a className="nav-link" href="!#">Add User</a>
-                           </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="!#">Show User</a>
                         </li>
-                      </div>
+                   )}
+                   {(userType === 'admin')&&(
+                       <li className="nav-item">
+                       <a className="nav-link" href="!#">Show User</a>
+                   </li>
+               
                    )}
                 </ul>
                 <ul className="navbar-nav">
                 <li className="nav-item dropdown">
                     <a className="nav-link dropdown-toggle" href="!#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    User
+                    {userName}
                     </a>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a className="dropdown-item" href="!#">Profile</a>
-                    <a className="dropdown-item" href="!#">Log out</a>
+                    <button className="dropdown-item" onClick={logoutHandler}>Log out</button>
                     </div>
                 </li>
                 </ul>
