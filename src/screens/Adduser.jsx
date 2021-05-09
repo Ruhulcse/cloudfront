@@ -1,20 +1,28 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Dashboard from "./Dashboard"
+import {URL,config} from "../Utils/Config"
+import axios from 'axios';
+
 function Adduser({history}) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("admin");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const submitHandler = async (e) => {
         e.preventDefault();
         const user = { name, email, role, password };
         try {
-        //   const { data } = await axios.post("/api/users", user, config);
-        //   if (data) {
-        //     history.push("/users");
-        //   }
+          setLoading(true);
+          const { data } = await axios.post(`${URL}api/v1/users/`, user, config);
+          if (data) {
+            setLoading(false);
+            history.push("/dashboard");
+          }
         } catch (error) {
           setError(error.response.data.message);
         }
@@ -22,32 +30,24 @@ function Adduser({history}) {
 
     return (
         <div>
-            <div className="content-wrapper">
+          <div className="content-wrapper">
         {/* Content Header (Page header) */}
         <section className="content-header">
           <div className="container-fluid">
-            <div className="row mb-2">
+            {/* <div className="row mb-2 pt-5">
               <div className="col-sm-6">
-                <h3>Add New User</h3>
                 <Link to="/dashboard" className="btn btn-primary mb-2">
                   Go Back
                 </Link>
               </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li className="breadcrumb-item active">Add New User</li>
-                </ol>
-              </div>
-            </div>
+            </div> */}
+            <Dashboard/>
           </div>
           {/* /.container-fluid */}
         </section>
 
         {/* Main content */}
-        <section className="content">
+        <section className="content pt-5">
           <div className="container-fluid">
             <div className="row d-flex justify-content-center">
               {/* left column */}
@@ -55,7 +55,7 @@ function Adduser({history}) {
                 {/* general form elements */}
                 <div className="card card-primary">
                   <div className="card-header">
-                    <h3 className="card-title">User Details</h3>
+                    <h3 className="card-title">{loading?(<CircularProgress/>):(<p>Add a new user</p>)}</h3>
                   </div>
                   {/* {error && <Message>{error}</Message>} */}
                   {/* /.card-header */}
@@ -106,9 +106,6 @@ function Adduser({history}) {
                           <option selected="selected" value="admin">
                             Admin
                           </option>
-                          <option value="broker">Broker</option>
-                          <option value="medical">Medical</option>
-                          <option value="spectator">Spectator</option>
                           <option value="general">General</option>
                         </select>
                       </div>
