@@ -6,10 +6,8 @@ function Dashboard() {
     let data = JSON.parse(localStorage.getItem('user'))
     let userType = data.role;
     let userName = data.name;
-    console.log(userType)
 
     const  logoutHandler =() => {
-        console.log("clicked")
         localStorage.clear();
         window.location.href = '/';
     }
@@ -23,14 +21,14 @@ function Dashboard() {
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item active">
-                        <a className="nav-link" href="#!">Add Data<span className="sr-only">(current)</span></a>
+                        <a className="nav-link" href="!#">Add Data<span className="sr-only">(current)</span></a>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" href="!#">Show Data</a>
                     </li>
                    {(userType==='admin')&&(
                          <li className="nav-item">
-                           <a className="nav-link" href="!#">Add User</a>
+                           <a className="nav-link" href="/dashboard/adduser">Add User</a>
                         </li>
                    )}
                    {(userType === 'admin')&&(
