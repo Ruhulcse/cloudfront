@@ -14,7 +14,7 @@ function Dashboard() {
     return (
         <div  className="container-fluid">
         <nav className="navbar navbar-expand-md navbar-light bg-light">
-            <a className="navbar-brand" href="#">Data Workspace</a>
+            <a className="navbar-brand" href="/dashboard">Data Workspace</a>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
                 <span className="navbar-toggler-icon"></span>
             </button>
@@ -44,7 +44,7 @@ function Dashboard() {
                     {userName}
                     </a>
                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a className="dropdown-item" href="!#">Profile</a>
+                    <a className="dropdown-item" href="/dashboard/userprofile">Profile</a>
                     <button className="dropdown-item" onClick={logoutHandler}>Log out</button>
                     </div>
                 </li>
