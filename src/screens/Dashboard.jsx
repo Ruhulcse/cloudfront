@@ -17,9 +17,9 @@ function Dashboard() {
 
   const navigation = [
     { name: 'Dashboard', href: '#', current: true, admin: false },
-    { name: 'Add Data', href: '#', current: false, admin: false },
+    { name: 'Add Data', href: '/dashboard/addData', current: false, admin: false },
     { name: 'Show Data', href: '#', current: false, admin: false },
-    { name: 'Add User', href: '#', current: false, admin: true },
+    { name: 'Add User', href: '/dashboard/adduser', current: false, admin: true },
     { name: 'Show User', href: '#', current: false, admin: true },
   ];
 
@@ -123,7 +123,7 @@ function Dashboard() {
                             <Menu.Item>
                               {({ active }) => (
                                 <a
-                                  href="#"
+                                  href="/dashboard/userprofile"
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',
                                     'block px-4 py-2 text-sm text-gray-700 hover:no-underline'
