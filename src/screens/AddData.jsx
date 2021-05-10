@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {URL,config} from "../Utils/Config"
+import {URL,config} from "../utils/config"
 import { Link } from "react-router-dom";
 import Dashboard from "./Dashboard";
 

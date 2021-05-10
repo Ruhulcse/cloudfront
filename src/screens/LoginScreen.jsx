@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React,{useState} from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress'
-import {URL} from "../Utils/Config"
+import {URL} from "../utils/config"
 
 export default function LoginScreen() {
   const [email,setEmail] = useState("");

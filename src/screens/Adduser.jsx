@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Dashboard from "./Dashboard"
-import {URL,config} from "../Utils/Config"
+import {URL,config} from "../utils/config"
 import axios from 'axios';
 
 function Adduser({history}) {

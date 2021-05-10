@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {URL,config} from "../Utils/Config"
+import {URL,config} from "../utils/config"
 import { Link } from "react-router-dom";
 import userProfile from "../assets/images/user.png"
 import CircularProgress from '@material-ui/core/CircularProgress'
