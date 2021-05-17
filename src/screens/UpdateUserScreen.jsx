@@ -5,6 +5,8 @@ import axios from 'axios';
 // import { config } from '../utils/tokenConfig';
 // import Loader from '../components/Loader';
 import { Link } from 'react-router-dom';
+import { config, URL } from '../utils/config';
+import Dashboard from './Dashboard';
 
 function UpdateUserScreen({ location, history }) {
   const [name, setName] = useState('');
@@ -16,11 +18,16 @@ function UpdateUserScreen({ location, history }) {
   const searchParams = new URLSearchParams(location.search);
   let id = searchParams.get('id');
 
+  console.log(id);
+
   useEffect(() => {
     try {
       async function fetchUserData() {
         setIsloading(true);
-        let { data } = await axios.get(`/api/users/profile/${id}`);
+        let { data } = await axios.get(
+          `${URL}api/v1/users/profile/${id}`,
+          config
+        );
         setName(data.name);
         setEmail(data.email);
         setRole(data.role);
@@ -37,12 +44,12 @@ function UpdateUserScreen({ location, history }) {
 
     try {
       const { data } = await axios.put(
-        `/api/users/profile/${id}`,
-        userData
-        // config
+        `${URL}api/v1/users/profile/${id}`,
+        userData,
+        config
       );
       if (data) {
-        history.push('/users/');
+        history.push('/showuser/');
       }
     } catch (error) {
       setError(error.response.data.message);
@@ -51,20 +58,21 @@ function UpdateUserScreen({ location, history }) {
   return (
     <>
       {/* <Meta title={'Add New User - MedInfo'} /> */}
-      <div className='content-wrapper'>
+      <div className="content-wrapper">
         {/* Content Header (Page header) */}
-        <section className='content-header'>
-          <div className='container-fluid'>
-            <div className='row mb-2'>
-              <div className='col-sm-6'>
-                <h3>Update user profile</h3>
+        <section className="content-header">
+          <Dashboard />
+          <div className="container-fluid">
+            <div className="row mb-2 mt-2">
+              <div className="col-sm-6">
+                <h3>Update User</h3>
               </div>
-              <div className='col-sm-6'>
-                <ol className='breadcrumb float-sm-right'>
-                  <li className='breadcrumb-item'>
-                    <Link to='/'>Home</Link>
+              <div className="col-sm-6">
+                <ol className="breadcrumb float-sm-right">
+                  <li className="breadcrumb-item">
+                    <Link to="/">Home</Link>
                   </li>
-                  <li className='breadcrumb-item active'>Update user profle</li>
+                  <li className="breadcrumb-item active">Update User</li>
                 </ol>
               </div>
             </div>
@@ -73,64 +81,64 @@ function UpdateUserScreen({ location, history }) {
         </section>
 
         {/* Main content */}
-        <section className='content'>
-          <div className='container-fluid'>
-            <div className='row d-flex justify-content-center'>
+        <section className="content">
+          <div className="container-fluid">
+            <div className="row d-flex justify-content-center">
               {/* left column */}
-              <div className='col-md-6'>
+              <div className="col-md-6">
                 {/* general form elements */}
-                <div className='card card-primary'>
-                  <div className='card-header'>
-                    <h3 className='card-title'>User Profile</h3>
+                <div className="card card-primary">
+                  <div className="card-header">
+                    <h3 className="card-title">User Profile</h3>
                   </div>
                   {/* {error && <Message>{error}</Message>} */}
                   {/* /.card-header */}
                   {/* form start */}
                   {isLoading ? (
-                    '<Loader />'
+                    'Loading...'
                   ) : (
                     <form onSubmit={submitHandler}>
-                      <div className='card-body'>
-                        <div className='form-group'>
-                          <label htmlFor='Name'>Name</label>
+                      <div className="card-body">
+                        <div className="form-group">
+                          <label htmlFor="Name">Name</label>
                           <input
-                            type='text'
-                            className='form-control'
-                            id='name'
-                            placeholder='Enter name'
+                            type="text"
+                            className="form-control"
+                            id="name"
+                            placeholder="Enter name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                           />
                         </div>
-                        <div className='form-group'>
-                          <label htmlFor='Email'>Email address</label>
+                        <div className="form-group">
+                          <label htmlFor="Email">Email address</label>
                           <input
-                            type='email'
-                            className='form-control'
-                            id='email'
-                            placeholder='Enter email'
+                            type="email"
+                            className="form-control"
+                            id="email"
+                            placeholder="Enter email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                           />
                         </div>
-                        <div className='form-group'>
-                          <label htmlFor='Role'>Role</label>
+                        <div className="form-group">
+                          <label htmlFor="Role">Role</label>
                           <select
-                            className='form-control select2'
+                            className="form-control select2"
                             style={{ width: '100%' }}
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
                           >
-                            <option selected='selected'>{role}</option>
-                            <option value='broker'>Broker</option>
-                            <option value='medical'>Medical</option>
-                            <option value='spectator'>Spectator</option>
+                            <option selected="selected">{role}</option>
+                            <option value="broker">Broker</option>
+                            <option value="medical">Medical</option>
+                            <option value="spectator">Spectator</option>
                           </select>
                         </div>
                       </div>
                       {/* /.card-body */}
-                      <div className='card-footer'>
-                        <button type='submit' className='btn btn-primary'>
+                      <div className="card-footer">
+                        <button type="submit" className="btn btn-primary">
                           update
                         </button>
                       </div>
