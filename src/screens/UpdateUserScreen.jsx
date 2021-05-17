@@ -63,9 +63,9 @@ function UpdateUserScreen({ location, history }) {
         <section className="content-header">
           <Dashboard />
           <div className="container-fluid">
-            <div className="row mb-2 mt-2">
+            <div className="row mb-2 mt-3">
               <div className="col-sm-6">
-                <h3>Update User</h3>
+                <h1>Update User</h1>
               </div>
               <div className="col-sm-6">
                 <ol className="breadcrumb float-sm-right">
@@ -130,9 +130,8 @@ function UpdateUserScreen({ location, history }) {
                             onChange={(e) => setRole(e.target.value)}
                           >
                             <option selected="selected">{role}</option>
-                            <option value="broker">Broker</option>
-                            <option value="medical">Medical</option>
-                            <option value="spectator">Spectator</option>
+                            <option value="admin">admin</option>
+                            <option value="general">general</option>
                           </select>
                         </div>
                       </div>
