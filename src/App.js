@@ -6,17 +6,19 @@ import UserProfile from './screens/UserProfile';
 import ShowUserScreen from './screens/ShowUserScreen';
 import UpdateUserScreen from './screens/UpdateUserScreen';
 import AddData from './screens/AddData';
+import ShowData from './screens/ShowData';
 function App() {
   return (
     <>
       <Router>
-        <Route exact path='/' component={LoginScreen} />
-        <Route exact path='/dashboard' component={Dashboard} />
-        <Route exact path='/showuser' component={ShowUserScreen} />
-        <Route exact path='/updateuser' component={UpdateUserScreen} />
-        <Route exact path='/dashboard/adduser' component={Adduser} />
-        <Route exact path='/dashboard/userprofile' component={UserProfile} />
-        <Route exact path='/dashboard/addData' component={AddData} />
+        <Route exact path="/" component={LoginScreen} />
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/showuser" component={ShowUserScreen} />
+        <Route exact path="/updateuser" component={UpdateUserScreen} />
+        <Route exact path="/dashboard/adduser" component={Adduser} />
+        <Route exact path="/dashboard/userprofile" component={UserProfile} />
+        <Route exact path="/dashboard/addData" component={AddData} />
+        <Route exact path="/showData" component={ShowData} />
       </Router>
     </>
   );
