@@ -4,6 +4,7 @@ import axios from 'axios';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Dashboard from './Dashboard';
 
 export default function ShowUserScreen() {
   const { isLoading, error, data } = useQuery('userData', () =>
@@ -25,13 +26,22 @@ export default function ShowUserScreen() {
     // }
   };
 
+  const deleteHandler = async (id) => {
+    console.log(id);
+    if (window.confirm('Delete the item?')) {
+      await axios.delete(`${URL}api/v1/users/profile/${id}`, config);
+      window.location.reload();
+    }
+  };
+
   return (
     <>
       <div className='content-wrapper'>
         {/* Content Header (Page header) */}
         <section className='content-header'>
+          <Dashboard />
           <div className='container-fluid'>
-            <div className='row'>
+            <div className='row mt-3'>
               <div className='col-sm-6'>
                 <h1>All Users</h1>
               </div>
@@ -105,7 +115,7 @@ export default function ShowUserScreen() {
                       <Button
                         variant='danger'
                         className='btn-sm'
-                        // onClick={() => deleteHandler(user._id)}
+                        onClick={() => deleteHandler(user._id)}
                       >
                         <i className='fas fa-trash-alt'></i>
                       </Button>
