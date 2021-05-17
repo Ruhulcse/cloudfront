@@ -58,7 +58,10 @@ function Dashboard() {
                 <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex-shrink-0 flex items-center">
                     <h4>
-                      <a className="text-white" href="#">
+                      <a
+                        className="text-white hover:no-underline"
+                        href="/dashboard"
+                      >
                         Data Workspace
                       </a>
                     </h4>

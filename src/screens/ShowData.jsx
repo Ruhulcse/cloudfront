@@ -65,7 +65,7 @@ export default function ShowData() {
           <div className="card-body">
             <div className="row mb-2">
               <div className="col">
-                <LinkContainer to={'/users/new'}>
+                <LinkContainer to={'/dashboard/addData'}>
                   <Button variant="primary" className="btn">
                     Add Data
                   </Button>
