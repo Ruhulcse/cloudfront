@@ -34,7 +34,7 @@ export default function ShowData() {
   const deleteHandler = async (id) => {
     console.log(id);
     if (window.confirm('Delete the item?')) {
-      await axios.delete(`${URL}api/v1/users/profile/${id}`, config);
+      await axios.delete(`${URL}api/v1/data/${id}`, config);
       window.location.reload();
     }
   };
