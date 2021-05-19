@@ -5,6 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Dashboard from './Dashboard';
+import { CSVLink, CSVDownload } from 'react-csv';
 
 export default function ShowData() {
   const { isLoading, error, data } = useQuery('userData', () =>
@@ -17,6 +18,10 @@ export default function ShowData() {
 
   console.log(data);
   console.log(data.data);
+
+  let csvData = data.data;
+
+  console.log(csvData);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -66,10 +71,17 @@ export default function ShowData() {
             <div className="row mb-2">
               <div className="col">
                 <LinkContainer to={'/dashboard/addData'}>
-                  <Button variant="primary" className="btn">
+                  <Button variant="primary" className="btn mr-4">
                     Add Data
                   </Button>
                 </LinkContainer>
+                <CSVLink
+                  data={csvData}
+                  filename={'data-file.csv'}
+                  className="btn btn-outline-primary"
+                >
+                  <i className="fas fa-file-download"></i> Export to CSV
+                </CSVLink>
               </div>
               <div className="col-auto">
                 <Form onSubmit={submitHandler} inline>
