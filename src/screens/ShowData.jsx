@@ -2,26 +2,46 @@ import { useQuery } from 'react-query';
 import { config, URL } from '../utils/config';
 import axios from 'axios';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Dashboard from './Dashboard';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
+import { useEffect, useState } from 'react';
 
 export default function ShowData() {
-  const { isLoading, error, data } = useQuery('userData', () =>
-    axios.get(`${URL}api/v1/data`, config)
-  );
+  const [promoMsg, setPromoMsg] = useState('0');
+  const [replied, setReplied] = useState('None');
+  const [reply, setReply] = useState('0');
+  const [status, setStatus] = useState('None');
+  const [interest, setInterest] = useState('None');
+  const [followup, setFollowup] = useState('None');
+  const [loading, setLoading] = useState(true);
+  const [pageOfItems, setPageOfItems] = useState([]);
 
-  if (isLoading) return 'Loading...';
+  // const { isLoading, error, data } = useQuery('userData', () =>
+  //   axios.get(`${URL}api/v1/data`, config)
+  // );
 
-  if (error) return 'An error has occurred: ' + error.message;
+  // if (error) return 'An error has occurred: ' + error.message;
 
-  console.log(data);
-  console.log(data.data);
+  // console.log(data);
+  // console.log(data.data);
 
-  let csvData = data.data;
-
-  console.log(csvData);
+  useEffect(() => {
+    try {
+      async function fetchUserData() {
+        setLoading(true);
+        let data = await axios.get(`${URL}api/v1/data`, config);
+        // setPager(pager);
+        setPageOfItems(data?.data);
+        console.log(data?.data);
+        setLoading(false);
+      }
+      fetchUserData();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -39,23 +59,42 @@ export default function ShowData() {
     }
   };
 
+  console.log(replied);
+
+  const filterApplied = () => {
+    console.log('filtered');
+    let filteredItems = pageOfItems?.filter(
+      (item) =>
+        item.promoMsg === promoMsg &&
+        item.replaid === replied &&
+        item.reply === reply &&
+        item.interest === interest &&
+        item.followup === followup &&
+        item.status === status
+    );
+    setPageOfItems(filteredItems);
+    console.log(filteredItems);
+  };
+
+  // if (loading) return 'Loading...';
+
   return (
     <>
-      <div className="content-wrapper">
+      <div className='content-wrapper'>
         {/* Content Header (Page header) */}
-        <section className="content-header">
+        <section className='content-header'>
           <Dashboard />
-          <div className="container-fluid">
-            <div className="row mt-3">
-              <div className="col-sm-6">
+          <div className='container-fluid'>
+            <div className='row mt-3'>
+              <div className='col-sm-6'>
                 <h1>All Data</h1>
               </div>
-              <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
-                  <li className="breadcrumb-item">
-                    <Link to="/">Home</Link>
+              <div className='col-sm-6'>
+                <ol className='breadcrumb float-sm-right'>
+                  <li className='breadcrumb-item'>
+                    <Link to='/'>Home</Link>
                   </li>
-                  <li className="breadcrumb-item active">All Data</li>
+                  <li className='breadcrumb-item active'>All Data</li>
                 </ol>
               </div>
             </div>
@@ -63,96 +102,220 @@ export default function ShowData() {
           {/* /.container-fluid */}
         </section>
 
-        <div className="card">
-          {/* {isLoading ? (
-            '<Loader />'
-          ) : ( */}
-          <div className="card-body">
-            <div className="row mb-2">
-              <div className="col">
-                <LinkContainer to={'/dashboard/addData'}>
-                  <Button variant="primary" className="btn mr-4">
-                    Add Data
-                  </Button>
-                </LinkContainer>
-                <CSVLink
-                  data={csvData}
-                  filename={'data-file.csv'}
-                  className="btn btn-outline-primary"
-                >
-                  <i className="fas fa-file-download"></i> Export to CSV
-                </CSVLink>
-              </div>
-              <div className="col-auto">
-                <Form onSubmit={submitHandler} inline>
-                  <Form.Control
-                    type="text"
-                    name="q"
-                    // onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="Search..."
-                    className="mr-sm-2 ml-auto"
-                  ></Form.Control>{' '}
-                  <Button
-                    type="submit"
-                    variant="outline-primary"
-                    className="p-2"
+        <div className='card'>
+          {loading ? (
+            'Loading...'
+          ) : (
+            <div className='card-body'>
+              <div className='row mb-2'>
+                <div className='col'>
+                  <LinkContainer to={'/dashboard/addData'}>
+                    <Button variant='primary' className='btn mr-4'>
+                      Add Data
+                    </Button>
+                  </LinkContainer>
+                  <CSVLink
+                    data={pageOfItems}
+                    filename={'data-file.csv'}
+                    className='btn btn-outline-primary'
                   >
-                    Search
-                  </Button>
-                </Form>
-              </div>
-            </div>
-            <table id="allUsers" className="table table-bordered table-striped">
-              <thead>
-                <tr className="bg-dark text-white">
-                  <th>Company Name</th>
-                  <th>Domain</th>
-                  <th>Email</th>
-                  <th>Country Code</th>
-                  <th>Phone</th>
-                  <th>Facebook</th>
-                  <th>Instagram</th>
-                  <th>Twitter</th>
-                  <th>Rank</th>
-                  <th>Site Earning</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
+                    <i className='fas fa-file-download'></i> Export to CSV
+                  </CSVLink>
+                </div>
+                <div className='col-auto'>
+                  <>
+                    <strong>Filter By</strong>
+                    <br />
+                    <div className='col-md-12 form-inline'>
+                      <div className='form-group'>
+                        <label htmlFor='Desired Country'>Promo Message</label>
+                        <select
+                          className='form-control select2'
+                          style={{ width: '100%' }}
+                          value={promoMsg}
+                          onChange={(e) => setPromoMsg(e.target.value)}
+                        >
+                          <option selected='selected'>None</option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                          <option>6</option>
+                          <option>7</option>
+                          <option>8</option>
+                          <option>9</option>
+                          <option>10</option>
+                        </select>
+                      </div>
+                      <div className='form-group'>
+                        <label htmlFor='District'>Replied</label>
+                        <select
+                          className='form-control select2'
+                          style={{ width: '100%' }}
+                          value={replied}
+                          onChange={(e) => setReplied(e.target.value)}
+                        >
+                          <option selected='selected'>None</option>
+                          <option>Yes</option>
+                          <option>No</option>
+                          <option>None</option>
+                        </select>
+                        <Col>
+                          <Button
+                            variant='outline-primary'
+                            className='ml-auto'
+                            size='sm'
+                            onClick={() => {
+                              filterApplied();
+                            }}
+                          >
+                            Go
+                          </Button>
+                        </Col>
+                      </div>
+                      <div className='form-group'>
+                        <label htmlFor='Desired Country'>Reply</label>
+                        <select
+                          className='form-control select2'
+                          style={{ width: '100%' }}
+                          value={reply}
+                          onChange={(e) => setReply(e.target.value)}
+                        >
+                          <option selected='selected'>None</option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                          <option>6</option>
+                          <option>7</option>
+                          <option>8</option>
+                          <option>9</option>
+                          <option>10</option>
+                        </select>
+                      </div>
+                      <div className='form-group'>
+                        <label htmlFor='District'>Status</label>
+                        <select
+                          className='form-control select2'
+                          style={{ width: '100%' }}
+                          value={status}
+                          onChange={(e) => setStatus(e.target.value)}
+                        >
+                          <option selected='selected'>None</option>
+                          <option>Banned</option>
+                          <option>Sold</option>
+                          <option>Active</option>
+                          <option>None</option>
+                        </select>
+                      </div>
+                      <div className='form-group'>
+                        <label htmlFor='District'>Interest</label>
+                        <select
+                          className='form-control select2'
+                          style={{ width: '100%' }}
+                          value={interest}
+                          onChange={(e) => setInterest(e.target.value)}
+                        >
+                          <option selected='selected'>None</option>
+                          <option>Yes</option>
+                          <option>No</option>
+                          <option>None</option>
+                        </select>
+                      </div>
+                      <div className='form-group'>
+                        <label htmlFor='District'>Followup</label>
+                        <select
+                          className='form-control select2'
+                          style={{ width: '100%' }}
+                          value={followup}
+                          onChange={(e) => setFollowup(e.target.value)}
+                        >
+                          <option selected='selected'>None</option>
+                          <option>Yes</option>
+                          <option>No</option>
+                          <option>None</option>
+                        </select>
+                      </div>
+                    </div>
 
-              <tbody>
-                {data?.data?.map((user) => (
-                  <tr key={user._id}>
-                    <td>{user.companyName}</td>
-                    <td>{user.domain}</td>
-                    <td>{user.email}</td>
-                    <td>{user.countryCode}</td>
-                    <td>{user.phone}</td>
-                    <td>{user.fbUrl}</td>
-                    <td>{user.igUrl}</td>
-                    <td>{user.twitterUrl}</td>
-                    <td>{user.rank}</td>
-                    <td>{user.siteEearning}</td>
-                    <td>
-                      <LinkContainer to={`/updateuser?id=${user._id}`}>
-                        <Button variant="warning" className="btn-sm ml-2 mr-1 ">
-                          <i className="fas fa-edit"></i>
-                        </Button>
-                      </LinkContainer>{' '}
+                    {/* <Form onSubmit={submitHandler} inline>
+                      <Form.Control
+                        type='text'
+                        name='q'
+                        // onChange={(e) => setKeyword(e.target.value)}
+                        placeholder='Search...'
+                        className='mr-sm-2 ml-auto'
+                      ></Form.Control>{' '}
                       <Button
-                        variant="danger"
-                        className="btn-sm"
-                        onClick={() => deleteHandler(user._id)}
+                        type='submit'
+                        variant='outline-primary'
+                        className='p-2'
                       >
-                        <i className="fas fa-trash-alt"></i>
+                        Search
                       </Button>
-                    </td>
+                    </Form> */}
+                  </>
+                </div>
+              </div>
+              <table
+                id='allUsers'
+                className='table table-bordered table-striped'
+              >
+                <thead>
+                  <tr className='bg-dark text-white'>
+                    <th>Company Name</th>
+                    <th>Domain</th>
+                    <th>Email</th>
+                    <th>Country Code</th>
+                    <th>Phone</th>
+                    <th>Facebook</th>
+                    <th>Instagram</th>
+                    <th>Twitter</th>
+                    <th>Rank</th>
+                    <th>Site Earning</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            {/* <Paginate pager={pager} /> */}
-          </div>
-          {/* )} */}
+                </thead>
+
+                <tbody>
+                  {pageOfItems?.map((user) => (
+                    <tr key={user._id}>
+                      <td>{user.companyName}</td>
+                      <td>{user.domain}</td>
+                      <td>{user.email}</td>
+                      <td>{user.countryCode}</td>
+                      <td>{user.phone}</td>
+                      <td>{user.fbUrl}</td>
+                      <td>{user.igUrl}</td>
+                      <td>{user.twitterUrl}</td>
+                      <td>{user.rank}</td>
+                      <td>{user.siteEearning}</td>
+                      <td>
+                        <LinkContainer to={`/updateuser?id=${user._id}`}>
+                          <Button
+                            variant='warning'
+                            className='btn-sm ml-2 mr-1 '
+                          >
+                            <i className='fas fa-edit'></i>
+                          </Button>
+                        </LinkContainer>{' '}
+                        <Button
+                          variant='danger'
+                          className='btn-sm'
+                          onClick={() => deleteHandler(user._id)}
+                        >
+                          <i className='fas fa-trash-alt'></i>
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {/* <Paginate pager={pager} /> */}
+            </div>
+          )}
         </div>
       </div>
     </>
