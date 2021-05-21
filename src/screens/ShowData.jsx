@@ -127,7 +127,7 @@ export default function ShowData() {
                     <strong>Filter By</strong>
                     <br />
                     <div className='col-md-12 form-inline'>
-                      <div className='form-group'>
+                      <div className='form-group mr-1'>
                         <label htmlFor='Desired Country'>Promo Message</label>
                         <select
                           className='form-control select2'
@@ -148,7 +148,7 @@ export default function ShowData() {
                           <option>10</option>
                         </select>
                       </div>
-                      <div className='form-group'>
+                      <div className='form-group mr-1'>
                         <label htmlFor='District'>Replied</label>
                         <select
                           className='form-control select2'
@@ -161,20 +161,8 @@ export default function ShowData() {
                           <option>No</option>
                           <option>None</option>
                         </select>
-                        <Col>
-                          <Button
-                            variant='outline-primary'
-                            className='ml-auto'
-                            size='sm'
-                            onClick={() => {
-                              filterApplied();
-                            }}
-                          >
-                            Go
-                          </Button>
-                        </Col>
                       </div>
-                      <div className='form-group'>
+                      <div className='form-group mr-1'>
                         <label htmlFor='Desired Country'>Reply</label>
                         <select
                           className='form-control select2'
@@ -195,7 +183,7 @@ export default function ShowData() {
                           <option>10</option>
                         </select>
                       </div>
-                      <div className='form-group'>
+                      <div className='form-group mr-1'>
                         <label htmlFor='District'>Status</label>
                         <select
                           className='form-control select2'
@@ -210,7 +198,7 @@ export default function ShowData() {
                           <option>None</option>
                         </select>
                       </div>
-                      <div className='form-group'>
+                      <div className='form-group mr-1'>
                         <label htmlFor='District'>Interest</label>
                         <select
                           className='form-control select2'
@@ -224,7 +212,7 @@ export default function ShowData() {
                           <option>None</option>
                         </select>
                       </div>
-                      <div className='form-group'>
+                      <div className='form-group mr-1'>
                         <label htmlFor='District'>Followup</label>
                         <select
                           className='form-control select2'
@@ -238,6 +226,19 @@ export default function ShowData() {
                           <option>None</option>
                         </select>
                       </div>
+
+                      <Col>
+                        <Button
+                          variant='outline-primary'
+                          className='mt-4'
+                          size='sm'
+                          onClick={() => {
+                            filterApplied();
+                          }}
+                        >
+                          Go
+                        </Button>
+                      </Col>
                     </div>
 
                     {/* <Form onSubmit={submitHandler} inline>
