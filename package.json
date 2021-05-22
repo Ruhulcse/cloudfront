@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "fuse.js": "^6.4.6",
     "google-spreadsheet": "^3.1.15",
     "jquery": "^3.6.0",
     "popper": "^1.0.1",
