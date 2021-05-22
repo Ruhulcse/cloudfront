@@ -33,7 +33,7 @@ function UpdateUserScreen({ location, history }) {
        }
        fetchData();
      } catch (error) {
-       
+       console.log(error)
      }
   }, [id]);
 

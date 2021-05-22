@@ -10,20 +10,37 @@ function UserProfile({ history }) {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName ] = useState("");
+  const [role, setRole] = useState("");
   const [bkash, setBkash ] = useState("Not added yet")
   const [amount, setAmount ] = useState("0");
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-      console.log("ok");
-    if (localStorage.getItem("user")) {
-      setUser(JSON.parse(localStorage.getItem("user")));
-    }
-  }, []);
-
   const userData = JSON.parse(localStorage.getItem("user"));
+  console.log(userData);
+  useEffect(() => {
+    try {
+      async function fetchData(){
+        setLoading(true);
+        let id = userData._id;
+        console.log(id);
+        let {data} = await axios.get(`${URL}api/v1/users/profile/${id}`,config);
+        console.log(data);
+        setEmail(data.email);
+        setRole(data.role);
+        setBkash(data.bkash);
+        setAmount(data.amount);
+        setName(data.name);
+        setLoading(false);
+      }
+      fetchData();
+    } catch (error) {
+      console.log(error)
+    }
+ }, []);
 
-  const name = userData.name;
+  
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -78,7 +95,7 @@ function UserProfile({ history }) {
                        </div>
                        <div>
                         <p className="profile-username">{name} </p>
-                        <p className="profile-username">{user.role}</p>
+                        <p className="profile-username">{role}</p>
                         <hr></hr>
                        </div>
                     </div>
@@ -89,8 +106,8 @@ function UserProfile({ history }) {
                       <p>Amount:</p>
                     </div>
                     <div className="col-md-6">
-                      <p>{user.bkash}</p>
-                      <p>{user.amount}</p>
+                      <p>{bkash}</p>
+                      <p>{amount}</p>
                     </div>
                     <hr></hr>
                     </div>
@@ -140,9 +157,9 @@ function UserProfile({ history }) {
                                   className="form-control"
                                   id="inputName"
                                   placeholder="Name"
-                                  value={user.name}
+                                  value={name}
                                   onChange={(e) =>
-                                    setUser({ ...user, name: e.target.value })
+                                    setName(e.target.value)
                                   }
                                 />
                               </div>
@@ -160,9 +177,9 @@ function UserProfile({ history }) {
                                   className="form-control"
                                   id="inputEmail"
                                   placeholder="Email"
-                                  value={user.email}
+                                  value={email}
                                   onChange={(e) =>
-                                    setUser({ ...user, email: e.target.value })
+                                    setEmail(e.target.value)
                                   }
                                 />
                               </div>
@@ -182,24 +199,6 @@ function UserProfile({ history }) {
                                   placeholder="Change password"
                                   value={password}
                                   onChange={(e) => setPassword(e.target.value)}
-                                />
-                              </div>
-                            </div>
-                            <div className="form-group row">
-                              <label
-                                htmlFor="inputRole"
-                                className="col-sm-2 col-form-label"
-                              >
-                                Role
-                              </label>
-                              <div className="col-sm-8">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  id="inputRole"
-                                  placeholder="Role"
-                                  value={user.role}
-                                  disabled
                                 />
                               </div>
                             </div>
