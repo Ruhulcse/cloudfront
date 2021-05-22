@@ -4,6 +4,7 @@ import {URL,config} from "../utils/config"
 import { Link } from "react-router-dom";
 import Dashboard from "./Dashboard";
 
+
 export default function AddData({ history}) {
   const [domain, setDomain] = useState("");
   const [companyName, setCompanyName] = useState("");
@@ -91,12 +92,51 @@ export default function AddData({ history}) {
      followup,
      extraNote
     };
-  console.log(Formdata);
+    
     try {
       console.log(config);
       const { data } = await axios.post(`${URL}api/v1/data`,Formdata,config)
       console.log(data);
       if (data) {
+        try {
+          const response = await fetch(
+            "https://v1.nocodeapi.com/ruhul/google_sheets/HxNaRxbzEofDwnha?tabId=Sheet1",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify([
+                [
+                 domain,
+                 companyName,
+                 email,
+                 contactUrl,
+                 fbUrl,
+                 igUrl,
+                 twitterUrl,
+                 phone,
+                 promoMsg,
+                 replaid,
+                 reply,
+                 status,
+                 interest,
+                 countryCode,
+                 storeTheme,
+                 storeCreated,
+                 productSold,
+                 rank,
+                 siteEearning,
+                 followup,
+                 extraNote
+                ]
+              ])
+            }
+            )
+            await response.json();
+         } catch (err) {
+           console.log(err)
+         }
         history.push("/showData");
       }
     } catch (error) {
