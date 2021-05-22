@@ -300,7 +300,7 @@ export default function ShowData() {
                       <td>{user.rank}</td>
                       <td>{user.siteEearning}</td>
                       <td>
-                        <LinkContainer to={`/updateuser?id=${user._id}`}>
+                        <LinkContainer to={`/updatedata?id=${user._id}`}>
                           <Button
                             variant='warning'
                             className='btn-sm ml-2 mr-1 '

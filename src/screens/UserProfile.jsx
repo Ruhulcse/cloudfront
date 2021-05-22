@@ -10,6 +10,8 @@ function UserProfile({ history }) {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
   const [password, setPassword] = useState("");
+  const [bkash, setBkash ] = useState("Not added yet")
+  const [amount, setAmount ] = useState("0");
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -67,8 +69,31 @@ function UserProfile({ history }) {
                           alt="User profile"
                         />
                       </div>
-                      <h3 className="profile-username text-center">{name}</h3>
-                      <p className="text-muted text-center">{user.role}</p>
+                     <div className="row">
+                       <div className="col-md-4">
+                        <p className="profile-username">Name: </p>
+                        <p className="profile-username">UserType: </p>
+                        <hr></hr>
+                        
+                       </div>
+                       <div>
+                        <p className="profile-username">{name} </p>
+                        <p className="profile-username">{user.role}</p>
+                        <hr></hr>
+                       </div>
+                    </div>
+                    <div className="row">
+                    <h3>Payment Details:</h3>
+                    <div className="col-md-6">
+                      <p>Bkash number:</p>
+                      <p>Amount:</p>
+                    </div>
+                    <div className="col-md-6">
+                      <p>{user.bkash}</p>
+                      <p>{user.amount}</p>
+                    </div>
+                    <hr></hr>
+                    </div>
                       {/* <ul className="list-group list-group-unbordered mb-3">
                       <li className="list-group-item">
                         <b>Forms</b> <a className="float-right">1,322</a>

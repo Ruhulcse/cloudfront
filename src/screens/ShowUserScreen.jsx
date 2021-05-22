@@ -96,6 +96,8 @@ export default function ShowUserScreen() {
                   <th>Name</th>
                   <th>Email</th>
                   <th>Role</th>
+                  <th>Bkash</th>
+                  <th>Amount</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -106,6 +108,8 @@ export default function ShowUserScreen() {
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.role}</td>
+                    <td>{user.bkash}</td>
+                    <td>{user.amount}</td>
                     <td>
                       <LinkContainer to={`/updateuser?id=${user._id}`}>
                         <Button variant="warning" className="btn-sm ml-2 mr-1 ">
