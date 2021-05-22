@@ -17,6 +17,7 @@ export default function ShowData() {
   const [followup, setFollowup] = useState('None');
   const [loading, setLoading] = useState(true);
   const [pageOfItems, setPageOfItems] = useState([]);
+  const [user, setUser] = useState([]);
 
   // const { isLoading, error, data } = useQuery('userData', () =>
   //   axios.get(`${URL}api/v1/data`, config)
@@ -26,12 +27,16 @@ export default function ShowData() {
 
   // console.log(data);
   // console.log(data.data);
+  //setUser(JSON.parse(localStorage.getItem("user")));
 
   useEffect(() => {
     try {
       async function fetchUserData() {
         setLoading(true);
-        let data = await axios.get(`${URL}api/v1/data`, config);
+        let user = JSON.parse(localStorage.getItem("user"));
+        let id = user._id;
+        console.log(user);
+        let data = user.role === "admin" ? await axios.get(`${URL}api/v1/data`, config): await axios.get(`${URL}api/v1/data/user/${id}`, config);
         // setPager(pager);
         setPageOfItems(data?.data);
         console.log(data?.data);
@@ -39,6 +44,7 @@ export default function ShowData() {
       }
       fetchUserData();
     } catch (error) {
+
       console.log(error);
     }
   }, []);
