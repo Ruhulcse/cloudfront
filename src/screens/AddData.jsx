@@ -94,13 +94,11 @@ export default function AddData({ history}) {
     };
     
     try {
-      console.log(config);
       const { data } = await axios.post(`${URL}api/v1/data`,Formdata,config)
-      console.log(data);
       if (data) {
         try {
           const response = await fetch(
-            "https://v1.nocodeapi.com/ruhul/google_sheets/HxNaRxbzEofDwnha?tabId=Sheet1",
+            "https://v1.nocodeapi.com/tonmoy/google_sheets/SOEgkXYMOgGjwNrQ?tabId=Sheet1",
             {
               method: "POST",
               headers: {
@@ -134,6 +132,7 @@ export default function AddData({ history}) {
             }
             )
             await response.json();
+            console.log(response);
          } catch (err) {
            console.log(err)
          }
