@@ -5,6 +5,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Dashboard from './Dashboard';
+import Fuse from 'fuse.js';
 import { CSVLink } from 'react-csv';
 import { useEffect, useState } from 'react';
 
@@ -17,6 +18,8 @@ export default function ShowData() {
   const [followup, setFollowup] = useState('None');
   const [loading, setLoading] = useState(true);
   const [pageOfItems, setPageOfItems] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [user, setUser] = useState([]);
 
   // const { isLoading, error, data } = useQuery('userData', () =>
   //   axios.get(`${URL}api/v1/data`, config)
@@ -26,12 +29,36 @@ export default function ShowData() {
 
   // console.log(data);
   // console.log(data.data);
+  //setUser(JSON.parse(localStorage.getItem("user")));
+
+  useEffect(() => {
+    const fuse = new Fuse(pageOfItems, {
+      keys: ['domain'],
+    });
+    const results = fuse.search(searchTerm).map(({ item }) => item);
+
+    if (
+      pageOfItems.length > 0 &&
+      searchTerm.length >= 0 &&
+      results.length > 0
+    ) {
+      setPageOfItems(results);
+    } else {
+      setPageOfItems(pageOfItems);
+    }
+  }, [searchTerm]);
 
   useEffect(() => {
     try {
       async function fetchUserData() {
         setLoading(true);
-        let data = await axios.get(`${URL}api/v1/data`, config);
+        let user = JSON.parse(localStorage.getItem('user'));
+        let id = user._id;
+        console.log(user);
+        let data =
+          user.role === 'admin'
+            ? await axios.get(`${URL}api/v1/data`, config)
+            : await axios.get(`${URL}api/v1/data/user/${id}`, config);
         // setPager(pager);
         setPageOfItems(data?.data);
         console.log(data?.data);
@@ -43,14 +70,6 @@ export default function ShowData() {
     }
   }, []);
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-
-    // if (keyword) {
-    //   history.push(`/users/search/${keyword}/page/1`);
-    // }
-  };
-
   const deleteHandler = async (id) => {
     console.log(id);
     if (window.confirm('Delete the item?')) {
@@ -59,21 +78,17 @@ export default function ShowData() {
     }
   };
 
-  console.log(replied);
-
   const filterApplied = () => {
-    console.log('filtered');
     let filteredItems = pageOfItems?.filter(
       (item) =>
-        item.promoMsg === promoMsg &&
-        item.replaid === replied &&
-        item.reply === reply &&
-        item.interest === interest &&
-        item.followup === followup &&
+        item.promoMsg === promoMsg ||
+        item.replaid === replied ||
+        item.reply === reply ||
+        item.interest === interest ||
+        item.followup === followup ||
         item.status === status
     );
     setPageOfItems(filteredItems);
-    console.log(filteredItems);
   };
 
   // if (loading) return 'Loading...';
@@ -109,18 +124,48 @@ export default function ShowData() {
             <div className='card-body'>
               <div className='row mb-2'>
                 <div className='col'>
-                  <LinkContainer to={'/dashboard/addData'}>
-                    <Button variant='primary' className='btn mr-4'>
-                      Add Data
-                    </Button>
-                  </LinkContainer>
-                  <CSVLink
-                    data={pageOfItems}
-                    filename={'data-file.csv'}
-                    className='btn btn-outline-primary'
-                  >
-                    <i className='fas fa-file-download'></i> Export to CSV
-                  </CSVLink>
+                  <div className='ml-3'>
+                    <LinkContainer to={'/dashboard/addData'}>
+                      <Button variant='primary' className='btn mr-4'>
+                        Add Data
+                      </Button>
+                    </LinkContainer>
+                    <CSVLink
+                      data={pageOfItems}
+                      filename={'data-file.csv'}
+                      className='btn btn-outline-primary'
+                    >
+                      <i className='fas fa-file-download'></i> Export to CSV
+                    </CSVLink>
+                    
+                  </div>
+                  <div className='col mt-2'>
+                    <Form inline>
+                      <Form.Control
+                        type='text'
+                        // name="q"
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder='Search...'
+                        className='mr-sm-2'
+                      ></Form.Control>{' '}
+                      <Button
+                        type='submit'
+                        variant='primary'
+                        size='sm'
+                        className='p-2'
+                      >
+                        Search
+                      </Button>
+                      <Button
+                        size='sm'
+                        variant='danger'
+                        className='p-2 ml-1'
+                        onClick={() => window.location.reload()}
+                      >
+                        Reset
+                      </Button>
+                    </Form>
+                  </div>
                 </div>
                 <div className='col-auto'>
                   <>
@@ -238,25 +283,16 @@ export default function ShowData() {
                         >
                           Go
                         </Button>
+                        <Button
+                          variant='danger'
+                          size='sm'
+                          className='ml-1 mt-4'
+                          onClick={() => window.location.reload()}
+                        >
+                          Reset
+                        </Button>
                       </Col>
                     </div>
-
-                    {/* <Form onSubmit={submitHandler} inline>
-                      <Form.Control
-                        type='text'
-                        name='q'
-                        // onChange={(e) => setKeyword(e.target.value)}
-                        placeholder='Search...'
-                        className='mr-sm-2 ml-auto'
-                      ></Form.Control>{' '}
-                      <Button
-                        type='submit'
-                        variant='outline-primary'
-                        className='p-2'
-                      >
-                        Search
-                      </Button>
-                    </Form> */}
                   </>
                 </div>
               </div>
@@ -294,7 +330,7 @@ export default function ShowData() {
                       <td>{user.rank}</td>
                       <td>{user.siteEearning}</td>
                       <td>
-                        <LinkContainer to={`/updateuser?id=${user._id}`}>
+                        <LinkContainer to={`/updatedata?id=${user._id}`}>
                           <Button
                             variant='warning'
                             className='btn-sm ml-2 mr-1 '

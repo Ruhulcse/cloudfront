@@ -10,18 +10,20 @@ function Adduser({history}) {
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("admin");
     const [password, setPassword] = useState("");
+    const [bkash, setBkash] = useState("");
+    const [amount, setAmount] = useState("0");
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        const user = { name, email, role, password };
+        const user = { name, email, role, password ,bkash, amount};
         try {
           setLoading(true);
           const { data } = await axios.post(`${URL}api/v1/users/`, user, config);
           if (data) {
             setLoading(false);
-            history.push("/dashboard");
+            history.push("/showuser");
           }
         } catch (error) {
           setError(error.response.data.message);
@@ -57,7 +59,7 @@ function Adduser({history}) {
                   <div className="card-header">
                     <h3 className="card-title">{loading?(<CircularProgress/>):(<p>Add a new user</p>)}</h3>
                   </div>
-                  {/* {error && <Message>{error}</Message>} */}
+                  {error && <p>{error}</p>}
                   {/* /.card-header */}
                   {/* form start */}
                   <form onSubmit={submitHandler}>
@@ -108,6 +110,28 @@ function Adduser({history}) {
                           </option>
                           <option value="general">General</option>
                         </select>
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="Email">Bkash Number(optional)</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="email"
+                          placeholder="01xxxxxxxxx"
+                          value={bkash}
+                          onChange={(e) => setBkash(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="Password">Amount (optional)</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="password"
+                          placeholder="Enter amount"
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                        />
                       </div>
                     </div>
                     {/* /.card-body */}
