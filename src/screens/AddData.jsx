@@ -81,37 +81,38 @@ export default function AddData({ history }) {
   let formData = {};
 
   const addBatchData = async () => {
-    // csvData.map(async (item) => {
-    console.log(csvData[0]);
-    console.log(formData);
-    formData = {
-      domain: csvData[0].domain,
-      companyName: csvData[0].companyName,
-      email: csvData[0].email,
-      contactUrl: csvData[0].contactUrl,
-      fbUrl: csvData[0].fbUrl,
-      igUrl: csvData[0].igUrl,
-      twitterUrl: csvData[0].twitterUrl,
-      phone: csvData[0].phone,
-      promoMsg: csvData[0].promoMsg,
-      replaid: csvData[0].replaid,
-      reply: csvData[0].reply,
-      status: csvData[0].status,
-      interest: csvData[0].interest,
-      countryCode: csvData[0].countryCode,
-      storeTheme: csvData[0].storeTheme,
-      storeCreated: csvData[0].storeCreated,
-      productSold: csvData[0].productSold,
-      rank: csvData[0].rank,
-      siteEearning: csvData[0].siteEearning,
-      followup: csvData[0].followup,
-      extraNote: csvData[0].extraNote,
-    };
+    csvData.map(async (item) => {
+      formData = {
+        domain: item.domain,
+        companyName: item.companyName,
+        email: item.email,
+        contactUrl: item.contactUrl,
+        fbUrl: item.fbUrl,
+        igUrl: item.igUrl,
+        twitterUrl: item.twitterUrl,
+        phone: item.phone,
+        promoMsg: item.promoMsg,
+        replaid: item.replaid,
+        reply: item.reply,
+        status: item.status,
+        interest: item.interest,
+        countryCode: item.countryCode,
+        storeTheme: item.storeTheme,
+        storeCreated: item.storeCreated,
+        productSold: item.productSold,
+        rank: item.rank,
+        siteEearning: item.siteEearning,
+        followup: item.followup,
+        extraNote: item.extraNote,
+      };
 
-    console.log(formData);
-    const { data } = await axios.post(`${URL}api/v1/data`, formData, config);
-    console.log(data);
-    // });
+      const { data } = await axios.post(
+        `${URL}api/v1/data/batch`,
+        formData,
+        config
+      );
+      console.log('data from mongodb: ', data);
+    });
   };
 
   const submitHandler = async (e) => {
