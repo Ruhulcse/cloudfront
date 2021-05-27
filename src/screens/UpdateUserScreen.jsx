@@ -129,6 +129,7 @@ function UpdateUserScreen({ location, history }) {
                             Admin
                           </option>
                           <option value="general">General</option>
+                          <option value="restricted">Restricted</option>
                         </select>
                       </div>
                       <div className="form-group">

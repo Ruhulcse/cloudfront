@@ -18,6 +18,7 @@ function Adduser({history}) {
     const submitHandler = async (e) => {
         e.preventDefault();
         const user = { name, email, role, password ,bkash, amount};
+        console.log(user);
         try {
           setLoading(true);
           const { data } = await axios.post(`${URL}api/v1/users/`, user, config);
@@ -109,6 +110,7 @@ function Adduser({history}) {
                             Admin
                           </option>
                           <option value="general">General</option>
+                          <option value="restricted">Restricted</option>
                         </select>
                       </div>
                       <div className="form-group">
