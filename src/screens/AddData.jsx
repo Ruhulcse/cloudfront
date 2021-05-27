@@ -8,6 +8,7 @@ import { Form } from 'react-bootstrap';
 
 export default function AddData({ history }) {
   const [domain, setDomain] = useState('');
+  const [userName, setUserName ] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
   const [contactUrl, setContactUrl] = useState('');
@@ -32,6 +33,7 @@ export default function AddData({ history }) {
   const [domainMessage, setDomainMessage] = useState(false);
   const [availemsg, setAvailemsg] = useState(false);
   const [error, setError] = useState(null);
+
 
   const submitDomain = async (e) => {
     e.preventDefault();
@@ -123,10 +125,12 @@ export default function AddData({ history }) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(storeCreated);
+    let userData = JSON.parse(localStorage.getItem("user"));
+    let userName = userData.name;
     let createdDate = "2021-05-27" ;//new Date().toISOString().split('T')[0];
     const Formdata = {
      domain,
+     userName,
      companyName,
      email,
      contactUrl,
@@ -149,7 +153,6 @@ export default function AddData({ history }) {
      followup,
      extraNote
     };
-
     try {
       const { data } = await axios.post(`${URL}api/v1/data`, Formdata, config);
       if (data) {
@@ -184,6 +187,7 @@ export default function AddData({ history }) {
                   siteEearning,
                   followup,
                   extraNote,
+                  userName,
                 ],
               ]),
             }
@@ -193,7 +197,7 @@ export default function AddData({ history }) {
          } catch (err) {
            console.log(err)
          }
-        //history.push("/showData");
+        history.push("/showData");
       }
     } catch (error) {
       setError(error.response.data.message);
