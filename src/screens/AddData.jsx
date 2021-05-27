@@ -123,10 +123,9 @@ export default function AddData({ history }) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(storeCreated)
+    console.log(storeCreated);
     let createdDate = "2021-05-27" ;//new Date().toISOString().split('T')[0];
     const Formdata = {
-<<<<<<< HEAD
      domain,
      companyName,
      email,
@@ -149,29 +148,6 @@ export default function AddData({ history }) {
      siteEearning,
      followup,
      extraNote
-=======
-      domain,
-      companyName,
-      email,
-      contactUrl,
-      fbUrl,
-      igUrl,
-      twitterUrl,
-      phone,
-      promoMsg,
-      replaid,
-      reply,
-      status,
-      interest,
-      countryCode,
-      storeTheme,
-      storeCreated,
-      productSold,
-      rank,
-      siteEearning,
-      followup,
-      extraNote,
->>>>>>> e9d0b82b2f4345afe7b8cdef4796ee30782f9f6c
     };
 
     try {
@@ -211,7 +187,6 @@ export default function AddData({ history }) {
                 ],
               ]),
             }
-<<<<<<< HEAD
             )
             await response.json();
             console.log(response);
@@ -219,15 +194,6 @@ export default function AddData({ history }) {
            console.log(err)
          }
         //history.push("/showData");
-=======
-          );
-          await response.json();
-          console.log(response);
-        } catch (err) {
-          console.log(err);
-        }
-        history.push('/showData');
->>>>>>> e9d0b82b2f4345afe7b8cdef4796ee30782f9f6c
       }
     } catch (error) {
       setError(error.response.data.message);
