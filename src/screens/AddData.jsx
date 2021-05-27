@@ -209,14 +209,14 @@ export default function AddData({ history }) {
       <div className='content-wrapper'>
         {/* Content Header (Page header) */}
         <section className='content-header'>
-          <div className='container-fluid'>
+          <div className='container-fluid mb-5'>
             <Dashboard />
           </div>
           {/* /.container-fluid */}
         </section>
 
         {/* Main content */}
-        <section className='content'>
+        <section className='content pt-5'>
           <div className='container-fluid'>
             <div className='row d-flex justify-content-center'>
               <div className='col-md-8'>

@@ -20,17 +20,8 @@ export default function ShowData() {
   const [pageOfItems, setPageOfItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [user, setUser] = useState([]);
-
-  // const { isLoading, error, data } = useQuery('userData', () =>
-  //   axios.get(`${URL}api/v1/data`, config)
-  // );
-
-  // if (error) return 'An error has occurred: ' + error.message;
-
-  // console.log(data);
-  // console.log(data.data);
-  //setUser(JSON.parse(localStorage.getItem("user")));
-
+  const userData = JSON.parse(localStorage.getItem("user"));
+  console.log(userData);
   useEffect(() => {
     const fuse = new Fuse(pageOfItems, {
       keys: ['domain'],
@@ -99,7 +90,7 @@ export default function ShowData() {
         {/* Content Header (Page header) */}
         <section className='content-header'>
           <Dashboard />
-          <div className='container-fluid'>
+          <div className='container-fluid pt-5'>
             <div className='row mt-3'>
               <div className='col-sm-6'>
                 <h1>All Data</h1>
@@ -124,21 +115,22 @@ export default function ShowData() {
             <div className='card-body'>
               <div className='row mb-2'>
                 <div className='col'>
-                  <div className='ml-3'>
-                    <LinkContainer to={'/dashboard/addData'}>
-                      <Button variant='primary' className='btn mr-4'>
-                        Add Data
-                      </Button>
-                    </LinkContainer>
-                    <CSVLink
-                      data={pageOfItems}
-                      filename={'data-file.csv'}
-                      className='btn btn-outline-primary'
-                    >
-                      <i className='fas fa-file-download'></i> Export to CSV
-                    </CSVLink>
-                    
-                  </div>
+                  {userData.role!=="restricted" &&
+                      <div className='ml-3'>
+                      <LinkContainer to={'/dashboard/addData'}>
+                        <Button variant='primary' className='btn mr-4'>
+                          Add Data
+                        </Button>
+                      </LinkContainer>
+                      <CSVLink
+                        data={pageOfItems}
+                        filename={'data-file.csv'}
+                        className='btn btn-outline-primary'
+                      >
+                        <i className='fas fa-file-download'></i> Export to CSV
+                      </CSVLink>
+                      
+                    </div>}
                   <div className='col mt-2'>
                     <Form inline>
                       <Form.Control
@@ -302,6 +294,7 @@ export default function ShowData() {
               >
                <thead>
                   <tr className='bg-dark text-white'>
+                    <th>Added by</th>
                     <th>Company Name</th>
                     <th>Domain</th>
                     <th>Email</th>
@@ -310,7 +303,6 @@ export default function ShowData() {
                     <th>Instagram</th>
                     <th>Twitter</th>
                     <th>Phone</th>
-                    <th>Added by</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -318,6 +310,7 @@ export default function ShowData() {
                 <tbody >
                   {pageOfItems?.map((user) => (
                     <tr key={user._id}>
+                      <td>{user.userName}</td>
                       <td>{user.companyName}</td>
                       <td>{user.domain}</td>
                       <td>{user.email}</td>
@@ -334,7 +327,6 @@ export default function ShowData() {
                        <a href={user.twitterUrl} target="blank">Link</a>
                       </td>
                       <td>{user.phone}</td>
-                      <td>{user.userName}</td>
                       <td>
                         <LinkContainer to={`/updatedata?id=${user._id}`}>
                           <Button
