@@ -18,10 +18,23 @@ export default function ShowData() {
   const [followup, setFollowup] = useState('None');
   const [loading, setLoading] = useState(true);
   const [pageOfItems, setPageOfItems] = useState([]);
+  const [checkData ,setCheckData ] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [user, setUser] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const userData = JSON.parse(localStorage.getItem("user"));
   console.log(userData);
+
+  const submitDate= async(e)=>{
+    e.preventDefault();
+    console.log(checkData)
+   let result = checkData?.filter(
+    (item) =>
+     item.checkData >= startDate && item.checkData <= endDate
+  );
+  console.log(result)
+}
   useEffect(() => {
     const fuse = new Fuse(pageOfItems, {
       keys: ['domain'],
@@ -52,6 +65,7 @@ export default function ShowData() {
             : await axios.get(`${URL}api/v1/data/user/${id}`, config);
         // setPager(pager);
         setPageOfItems(data?.data);
+        setCheckData(data?.data);
         console.log(data?.data);
         setLoading(false);
       }
@@ -158,6 +172,37 @@ export default function ShowData() {
                       </Button>
                     </Form>
                   </div>
+                  <div className="container">
+                <form onSubmit={submitDate}>
+                  <div className="row">
+                      <div className="col-md-3">
+                          To: 
+                          <input
+                              className="form-control"
+                              type="date"
+                              id="dateOfBirth"
+                              value={startDate}
+                              onChange={(e) => setStartDate(e.target.value)}
+                            />
+                      </div>
+                      <div className="col-md-3">
+                        Form: 
+                          <input
+                              className="form-control"
+                              type="date"
+                              id="dateOfBirth"
+                              value={endDate}
+                              onChange={(e) => setEndDate(e.target.value)}
+                            />
+                      </div>
+                  </div>
+                  <div className="card-footer">
+                      <button type="submit" className="btn btn-primary">
+                        Apply
+                      </button>
+                    </div>
+                </form>
+            </div>
                 </div>
                 <div className='col-auto'>
                   <>
