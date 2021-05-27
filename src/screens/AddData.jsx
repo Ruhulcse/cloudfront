@@ -127,7 +127,7 @@ export default function AddData({ history }) {
     e.preventDefault();
     let userData = JSON.parse(localStorage.getItem("user"));
     let userName = userData.name;
-    let createdDate = "2021-05-27" ;//new Date().toISOString().split('T')[0];
+    let createdDate = new Date().toISOString().split('T')[0];
     const Formdata = {
      domain,
      userName,

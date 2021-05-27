@@ -300,35 +300,41 @@ export default function ShowData() {
                 id='allUsers'
                 className='table table-bordered table-striped'
               >
-                <thead>
+               <thead>
                   <tr className='bg-dark text-white'>
                     <th>Company Name</th>
                     <th>Domain</th>
                     <th>Email</th>
-                    <th>Country Code</th>
-                    <th>Phone</th>
+                    <th>Contact</th>
                     <th>Facebook</th>
                     <th>Instagram</th>
                     <th>Twitter</th>
-                    <th>Rank</th>
-                    <th>Site Earning</th>
+                    <th>Phone</th>
+                    <th>Added by</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody >
                   {pageOfItems?.map((user) => (
                     <tr key={user._id}>
                       <td>{user.companyName}</td>
                       <td>{user.domain}</td>
                       <td>{user.email}</td>
-                      <td>{user.countryCode}</td>
+                      <td>
+                       <a href={user.contactUrl} target="blank">Link</a>
+                      </td>
+                      <td>
+                       <a href={user.fbUrl} target="blank">Link</a>
+                      </td>
+                      <td>
+                       <a href={user.igUrl} target="blank">Link</a>
+                      </td>
+                      <td>
+                       <a href={user.twitterUrl} target="blank">Link</a>
+                      </td>
                       <td>{user.phone}</td>
-                      <td>{user.fbUrl}</td>
-                      <td>{user.igUrl}</td>
-                      <td>{user.twitterUrl}</td>
-                      <td>{user.rank}</td>
-                      <td>{user.siteEearning}</td>
+                      <td>{user.userName}</td>
                       <td>
                         <LinkContainer to={`/updatedata?id=${user._id}`}>
                           <Button
