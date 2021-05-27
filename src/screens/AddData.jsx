@@ -69,6 +69,8 @@ export default function AddData({ history}) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    console.log(storeCreated)
+    let createdDate = "2021-05-27" ;//new Date().toISOString().split('T')[0];
     const Formdata = {
      domain,
      companyName,
@@ -86,6 +88,7 @@ export default function AddData({ history}) {
      countryCode,
      storeTheme,
      storeCreated,
+     createdDate,
      productSold,
      rank,
      siteEearning,
@@ -136,7 +139,7 @@ export default function AddData({ history}) {
          } catch (err) {
            console.log(err)
          }
-        history.push("/showData");
+        //history.push("/showData");
       }
     } catch (error) {
       setError(error.response.data.message);

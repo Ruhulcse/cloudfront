@@ -7,13 +7,14 @@ import ShowUserScreen from "./screens/ShowUserScreen";
 import UpdateUserScreen from "./screens/UpdateUserScreen";
 import AddData from "./screens/AddData";
 import ShowData from "./screens/ShowData";
+import MainChart from "./screens/MainChart";
 import UpdateDataScreen from "./screens/UpdateDataScreen";
 function App() {
   return (
     <>
       <Router>
         <Route exact path="/" component={LoginScreen} />
-        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/dashboard" component={MainChart} />
         <Route exact path="/showuser" component={ShowUserScreen} />
         <Route exact path="/updateuser" component={UpdateUserScreen} />
         <Route exact path="/updatedata" component={UpdateDataScreen} />
