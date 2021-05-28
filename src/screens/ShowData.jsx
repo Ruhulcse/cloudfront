@@ -24,16 +24,18 @@ export default function ShowData() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const userData = JSON.parse(localStorage.getItem("user"));
-  console.log(userData);
 
   const submitDate= async(e)=>{
+     console.log(startDate);
+     console.log(endDate);
     e.preventDefault();
     console.log(checkData)
    let result = checkData?.filter(
     (item) =>
-     item.checkData >= startDate && item.checkData <= endDate
+     item.createdDate >= startDate && item.createdDate <= endDate
   );
   console.log(result)
+  setPageOfItems(result)
 }
   useEffect(() => {
     const fuse = new Fuse(pageOfItems, {
@@ -175,7 +177,7 @@ export default function ShowData() {
                   <div className="container">
                 <form onSubmit={submitDate}>
                   <div className="row">
-                      <div className="col-md-3">
+                      <div className="col-md-4">
                           To: 
                           <input
                               className="form-control"
@@ -185,7 +187,7 @@ export default function ShowData() {
                               onChange={(e) => setStartDate(e.target.value)}
                             />
                       </div>
-                      <div className="col-md-3">
+                      <div className="col-md-4">
                         Form: 
                           <input
                               className="form-control"
@@ -196,7 +198,7 @@ export default function ShowData() {
                             />
                       </div>
                   </div>
-                  <div className="card-footer">
+                  <div className="card-footer bg-gray">
                       <button type="submit" className="btn btn-primary">
                         Apply
                       </button>
