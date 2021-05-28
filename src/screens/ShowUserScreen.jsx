@@ -40,7 +40,7 @@ export default function ShowUserScreen() {
         {/* Content Header (Page header) */}
         <section className="content-header">
           <Dashboard />
-          <div className="container-fluid">
+          <div className="container-fluid pt-5">
             <div className="row mt-3">
               <div className="col-sm-6">
                 <h1>All Users</h1>

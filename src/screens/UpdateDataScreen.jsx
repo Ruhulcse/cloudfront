@@ -40,8 +40,6 @@ function UpdateDataScreen({ location, history }) {
   const searchParams = new URLSearchParams(location.search);
   let id = searchParams.get('id');
 
-  console.log(id);
-
   useEffect(() => {
     try {
       async function fetchUserData() {
@@ -50,6 +48,7 @@ function UpdateDataScreen({ location, history }) {
           `${URL}api/v1/data/${id}`,
           config
         );
+        console.log(data);
         setDomain(data.domain)
         setCompanyName(data.companyName);
         setEmail(data.email);

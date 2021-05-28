@@ -18,15 +18,13 @@ function UserProfile({ history }) {
   const [error, setError] = useState(null);
 
   const userData = JSON.parse(localStorage.getItem("user"));
-  console.log(userData);
+ 
   useEffect(() => {
     try {
       async function fetchData(){
         setLoading(true);
         let id = userData._id;
-        console.log(id);
         let {data} = await axios.get(`${URL}api/v1/users/profile/${id}`,config);
-        console.log(data);
         setEmail(data.email);
         setRole(data.role);
         setBkash(data.bkash);
@@ -45,13 +43,17 @@ function UserProfile({ history }) {
   const submitHandler = async (e) => {
     e.preventDefault();
     user.password = password;
+    user.email = email;
+    user.name = name;
+    user.amount = amount;
     console.log("onsubmit");
     try {
       const { data } = await axios.put(`${URL}api/v1/users/profile`, user, config);
-      if (data) {
-        localStorage.setItem("user", JSON.stringify(data));
-         window.location.href = "/dashboard";
-      }
+      console.log(data);
+      // if (data) {
+      //   localStorage.setItem("user", JSON.stringify(data));
+      //    window.location.href = "/dashboard";
+      // }
       setLoading(false);
     } catch (error) {
       setError(error.response.data.message);
@@ -199,6 +201,26 @@ function UserProfile({ history }) {
                                   placeholder="Change password"
                                   value={password}
                                   onChange={(e) => setPassword(e.target.value)}
+                                />
+                              </div>
+                            </div>
+                            <div className="form-group row">
+                              <label
+                                htmlFor="inputName"
+                                className="col-sm-2 col-form-label"
+                              >
+                                Amount
+                              </label>
+                              <div className="col-sm-8">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  id="inputName"
+                                  placeholder="Name"
+                                  value={amount}
+                                  onChange={(e) =>
+                                    setAmount(e.target.value)
+                                  }
                                 />
                               </div>
                             </div>

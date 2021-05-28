@@ -6,6 +6,7 @@ import {URL,config} from "../utils/config"
 import axios from 'axios';
 
 function Adduser({history}) {
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("admin");
@@ -14,10 +15,10 @@ function Adduser({history}) {
     const [amount, setAmount] = useState("0");
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
-
     const submitHandler = async (e) => {
         e.preventDefault();
         const user = { name, email, role, password ,bkash, amount};
+        console.log(user);
         try {
           setLoading(true);
           const { data } = await axios.post(`${URL}api/v1/users/`, user, config);
@@ -109,6 +110,7 @@ function Adduser({history}) {
                             Admin
                           </option>
                           <option value="general">General</option>
+                          <option value="restricted">Restricted</option>
                         </select>
                       </div>
                       <div className="form-group">

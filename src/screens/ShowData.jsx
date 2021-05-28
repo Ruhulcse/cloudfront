@@ -18,19 +18,23 @@ export default function ShowData() {
   const [followup, setFollowup] = useState('None');
   const [loading, setLoading] = useState(true);
   const [pageOfItems, setPageOfItems] = useState([]);
+  const [checkData ,setCheckData ] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [user, setUser] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const userData = JSON.parse(localStorage.getItem("user"));
+  console.log(userData);
 
-  // const { isLoading, error, data } = useQuery('userData', () =>
-  //   axios.get(`${URL}api/v1/data`, config)
-  // );
-
-  // if (error) return 'An error has occurred: ' + error.message;
-
-  // console.log(data);
-  // console.log(data.data);
-  //setUser(JSON.parse(localStorage.getItem("user")));
-
+  const submitDate= async(e)=>{
+    e.preventDefault();
+    console.log(checkData)
+   let result = checkData?.filter(
+    (item) =>
+     item.checkData >= startDate && item.checkData <= endDate
+  );
+  console.log(result)
+}
   useEffect(() => {
     const fuse = new Fuse(pageOfItems, {
       keys: ['domain'],
@@ -61,6 +65,7 @@ export default function ShowData() {
             : await axios.get(`${URL}api/v1/data/user/${id}`, config);
         // setPager(pager);
         setPageOfItems(data?.data);
+        setCheckData(data?.data);
         console.log(data?.data);
         setLoading(false);
       }
@@ -99,7 +104,7 @@ export default function ShowData() {
         {/* Content Header (Page header) */}
         <section className='content-header'>
           <Dashboard />
-          <div className='container-fluid'>
+          <div className='container-fluid pt-5'>
             <div className='row mt-3'>
               <div className='col-sm-6'>
                 <h1>All Data</h1>
@@ -124,21 +129,22 @@ export default function ShowData() {
             <div className='card-body'>
               <div className='row mb-2'>
                 <div className='col'>
-                  <div className='ml-3'>
-                    <LinkContainer to={'/dashboard/addData'}>
-                      <Button variant='primary' className='btn mr-4'>
-                        Add Data
-                      </Button>
-                    </LinkContainer>
-                    <CSVLink
-                      data={pageOfItems}
-                      filename={'data-file.csv'}
-                      className='btn btn-outline-primary'
-                    >
-                      <i className='fas fa-file-download'></i> Export to CSV
-                    </CSVLink>
-                    
-                  </div>
+                  {userData.role!=="restricted" &&
+                      <div className='ml-3'>
+                      <LinkContainer to={'/dashboard/addData'}>
+                        <Button variant='primary' className='btn mr-4'>
+                          Add Data
+                        </Button>
+                      </LinkContainer>
+                      <CSVLink
+                        data={pageOfItems}
+                        filename={'data-file.csv'}
+                        className='btn btn-outline-primary'
+                      >
+                        <i className='fas fa-file-download'></i> Export to CSV
+                      </CSVLink>
+                      
+                    </div>}
                   <div className='col mt-2'>
                     <Form inline>
                       <Form.Control
@@ -166,6 +172,37 @@ export default function ShowData() {
                       </Button>
                     </Form>
                   </div>
+                  <div className="container">
+                <form onSubmit={submitDate}>
+                  <div className="row">
+                      <div className="col-md-3">
+                          To: 
+                          <input
+                              className="form-control"
+                              type="date"
+                              id="dateOfBirth"
+                              value={startDate}
+                              onChange={(e) => setStartDate(e.target.value)}
+                            />
+                      </div>
+                      <div className="col-md-3">
+                        Form: 
+                          <input
+                              className="form-control"
+                              type="date"
+                              id="dateOfBirth"
+                              value={endDate}
+                              onChange={(e) => setEndDate(e.target.value)}
+                            />
+                      </div>
+                  </div>
+                  <div className="card-footer">
+                      <button type="submit" className="btn btn-primary">
+                        Apply
+                      </button>
+                    </div>
+                </form>
+            </div>
                 </div>
                 <div className='col-auto'>
                   <>
@@ -300,35 +337,41 @@ export default function ShowData() {
                 id='allUsers'
                 className='table table-bordered table-striped'
               >
-                <thead>
+               <thead>
                   <tr className='bg-dark text-white'>
+                    <th>Added by</th>
                     <th>Company Name</th>
                     <th>Domain</th>
                     <th>Email</th>
-                    <th>Country Code</th>
-                    <th>Phone</th>
+                    <th>Contact</th>
                     <th>Facebook</th>
                     <th>Instagram</th>
                     <th>Twitter</th>
-                    <th>Rank</th>
-                    <th>Site Earning</th>
+                    <th>Phone</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
 
-                <tbody>
+                <tbody >
                   {pageOfItems?.map((user) => (
                     <tr key={user._id}>
+                      <td>{user.userName}</td>
                       <td>{user.companyName}</td>
                       <td>{user.domain}</td>
                       <td>{user.email}</td>
-                      <td>{user.countryCode}</td>
+                      <td>
+                       <a href={user.contactUrl} target="blank">Link</a>
+                      </td>
+                      <td>
+                       <a href={user.fbUrl} target="blank">Link</a>
+                      </td>
+                      <td>
+                       <a href={user.igUrl} target="blank">Link</a>
+                      </td>
+                      <td>
+                       <a href={user.twitterUrl} target="blank">Link</a>
+                      </td>
                       <td>{user.phone}</td>
-                      <td>{user.fbUrl}</td>
-                      <td>{user.igUrl}</td>
-                      <td>{user.twitterUrl}</td>
-                      <td>{user.rank}</td>
-                      <td>{user.siteEearning}</td>
                       <td>
                         <LinkContainer to={`/updatedata?id=${user._id}`}>
                           <Button

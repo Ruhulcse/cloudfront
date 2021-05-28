@@ -4,9 +4,11 @@ import { URL, config } from '../utils/config';
 import { Link } from 'react-router-dom';
 import CSVReader from 'react-csv-reader';
 import Dashboard from './Dashboard';
+import { Form } from 'react-bootstrap';
 
 export default function AddData({ history }) {
   const [domain, setDomain] = useState('');
+  const [userName, setUserName ] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
   const [contactUrl, setContactUrl] = useState('');
@@ -31,6 +33,7 @@ export default function AddData({ history }) {
   const [domainMessage, setDomainMessage] = useState(false);
   const [availemsg, setAvailemsg] = useState(false);
   const [error, setError] = useState(null);
+
 
   const submitDomain = async (e) => {
     e.preventDefault();
@@ -106,41 +109,50 @@ export default function AddData({ history }) {
         extraNote: item.extraNote,
       };
 
-      const { data } = await axios.post(
-        `${URL}api/v1/data/batch`,
-        formData,
-        config
-      );
-      console.log('data from mongodb: ', data);
+      try {
+        const { data } = await axios.post(
+          `${URL}api/v1/data/batch`,
+          formData,
+          config
+        );
+        console.log('data from mongodb: ', data);
+        // history.push('/showData');
+      } catch (error) {
+        setError(error.response.data.message);
+      }
     });
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    let userData = JSON.parse(localStorage.getItem("user"));
+    let userName = userData.name;
+    let createdDate = new Date().toISOString().split('T')[0];
     const Formdata = {
-      domain,
-      companyName,
-      email,
-      contactUrl,
-      fbUrl,
-      igUrl,
-      twitterUrl,
-      phone,
-      promoMsg,
-      replaid,
-      reply,
-      status,
-      interest,
-      countryCode,
-      storeTheme,
-      storeCreated,
-      productSold,
-      rank,
-      siteEearning,
-      followup,
-      extraNote,
+     domain,
+     userName,
+     companyName,
+     email,
+     contactUrl,
+     fbUrl,
+     igUrl,
+     twitterUrl,
+     phone,
+     promoMsg,
+     replaid,
+     reply,
+     status,
+     interest,
+     countryCode,
+     storeTheme,
+     storeCreated,
+     createdDate,
+     productSold,
+     rank,
+     siteEearning,
+     followup,
+     extraNote
     };
-
     try {
       const { data } = await axios.post(`${URL}api/v1/data`, Formdata, config);
       if (data) {
@@ -175,16 +187,17 @@ export default function AddData({ history }) {
                   siteEearning,
                   followup,
                   extraNote,
+                  userName,
                 ],
               ]),
             }
-          );
-          await response.json();
-          console.log(response);
-        } catch (err) {
-          console.log(err);
-        }
-        history.push('/showData');
+            )
+            await response.json();
+            console.log(response);
+         } catch (err) {
+           console.log(err)
+         }
+        history.push("/showData");
       }
     } catch (error) {
       setError(error.response.data.message);
@@ -196,14 +209,14 @@ export default function AddData({ history }) {
       <div className='content-wrapper'>
         {/* Content Header (Page header) */}
         <section className='content-header'>
-          <div className='container-fluid'>
+          <div className='container-fluid mb-5'>
             <Dashboard />
           </div>
           {/* /.container-fluid */}
         </section>
 
         {/* Main content */}
-        <section className='content'>
+        <section className='content pt-5'>
           <div className='container-fluid'>
             <div className='row d-flex justify-content-center'>
               <div className='col-md-8'>
@@ -211,19 +224,28 @@ export default function AddData({ history }) {
                   <div className='card-header'>
                     <h3 className='card-title'>Add Data</h3>
                   </div>
-                  <CSVReader
-                    cssClass='react-csv-input form-control-file'
+                  {/* <CSVReader
+                    cssClass='react-csv-input'
+                    className='form-control-file'
                     label='Select CSV file'
                     onFileLoaded={handleForce}
                     parserOptions={papaparseOptions}
                   />
-                  <button
-                    type='button'
-                    onClick={addBatchData}
-                    className='btn btn-primary'
-                  >
-                    Submit
-                  </button>
+                   */}
+                  <Form inline className='ml-4 mt-2'>
+                    <CSVReader
+                      className='form-control-file'
+                      onFileLoaded={handleForce}
+                      parserOptions={papaparseOptions}
+                    />
+                    <button
+                      type='button'
+                      onClick={addBatchData}
+                      className='btn btn-primary'
+                    >
+                      Add Data
+                    </button>
+                  </Form>
                   {/* {error && <Message>{error}</Message>} */}
                   {/* /.card-header */}
                   {/* form start */}
