@@ -10,33 +10,28 @@ import { CSVLink } from 'react-csv';
 import { useEffect, useState } from 'react';
 
 export default function ShowData() {
-  const [promoMsg, setPromoMsg] = useState('0');
-  const [replied, setReplied] = useState('None');
-  const [reply, setReply] = useState('0');
-  const [status, setStatus] = useState('None');
-  const [interest, setInterest] = useState('None');
-  const [followup, setFollowup] = useState('None');
+  const [promoMsg, setPromoMsg] = useState('');
+  const [replied, setReplied] = useState('');
+  const [reply, setReply] = useState('');
+  const [status, setStatus] = useState('');
+  const [interest, setInterest] = useState('');
+  const [followup, setFollowup] = useState('');
   const [loading, setLoading] = useState(true);
   const [pageOfItems, setPageOfItems] = useState([]);
-  const [checkData ,setCheckData ] = useState([]);
+  const [checkData, setCheckData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [user, setUser] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const userData = JSON.parse(localStorage.getItem("user"));
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const userData = JSON.parse(localStorage.getItem('user'));
 
-  const submitDate= async(e)=>{
-     console.log(startDate);
-     console.log(endDate);
+  const submitDate = async (e) => {
     e.preventDefault();
-    console.log(checkData)
-   let result = checkData?.filter(
-    (item) =>
-     item.createdDate >= startDate && item.createdDate <= endDate
-  );
-  console.log(result)
-  setPageOfItems(result)
-}
+    let result = checkData?.filter(
+      (item) => item.createdDate >= startDate && item.createdDate <= endDate
+    );
+    setPageOfItems(result);
+  };
   useEffect(() => {
     const fuse = new Fuse(pageOfItems, {
       keys: ['domain'],
@@ -60,7 +55,6 @@ export default function ShowData() {
         setLoading(true);
         let user = JSON.parse(localStorage.getItem('user'));
         let id = user._id;
-        console.log(user);
         let data =
           user.role === 'admin'
             ? await axios.get(`${URL}api/v1/data`, config)
@@ -68,7 +62,6 @@ export default function ShowData() {
         // setPager(pager);
         setPageOfItems(data?.data);
         setCheckData(data?.data);
-        console.log(data?.data);
         setLoading(false);
       }
       fetchUserData();
@@ -78,7 +71,6 @@ export default function ShowData() {
   }, []);
 
   const deleteHandler = async (id) => {
-    console.log(id);
     if (window.confirm('Delete the item?')) {
       await axios.delete(`${URL}api/v1/data/${id}`, config);
       window.location.reload();
@@ -106,9 +98,9 @@ export default function ShowData() {
         {/* Content Header (Page header) */}
         <section className="content-header">
           <Dashboard />
-          <div className='container-fluid pt-5'>
-            <div className='row mt-3'>
-              <div className='col-sm-6'>
+          <div className="container-fluid pt-5">
+            <div className="row mt-3">
+              <div className="col-sm-6">
                 <h1>All Data</h1>
               </div>
               <div className="col-sm-6">
@@ -128,26 +120,26 @@ export default function ShowData() {
           {loading ? (
             'Loading...'
           ) : (
-            <div className='card-body'>
-              <div className='row mb-2'>
-                <div className='col'>
-                  {userData.role!=="restricted" &&
-                      <div className='ml-3'>
+            <div className="card-body">
+              <div className="row mb-2">
+                <div className="col">
+                  {userData.role !== 'restricted' && (
+                    <div className="ml-3">
                       <LinkContainer to={'/dashboard/addData'}>
-                        <Button variant='primary' className='btn mr-4'>
+                        <Button variant="primary" className="btn mr-4">
                           Add Data
                         </Button>
                       </LinkContainer>
                       <CSVLink
                         data={pageOfItems}
                         filename={'data-file.csv'}
-                        className='btn btn-outline-primary'
+                        className="btn btn-outline-primary"
                       >
-                        <i className='fas fa-file-download'></i> Export to CSV
+                        <i className="fas fa-file-download"></i> Export to CSV
                       </CSVLink>
-                      
-                    </div>}
-                  <div className='col mt-2'>
+                    </div>
+                  )}
+                  <div className="col mt-2">
                     <Form inline>
                       <Form.Control
                         type="text"
@@ -175,36 +167,36 @@ export default function ShowData() {
                     </Form>
                   </div>
                   <div className="container">
-                <form onSubmit={submitDate}>
-                  <div className="row">
-                      <div className="col-md-4">
-                          To: 
+                    <form onSubmit={submitDate}>
+                      <div className="row">
+                        <div className="col-md-4">
+                          To:
                           <input
-                              className="form-control"
-                              type="date"
-                              id="dateOfBirth"
-                              value={startDate}
-                              onChange={(e) => setStartDate(e.target.value)}
-                            />
-                      </div>
-                      <div className="col-md-4">
-                        Form: 
+                            className="form-control"
+                            type="date"
+                            id="dateOfBirth"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                          />
+                        </div>
+                        <div className="col-md-4">
+                          Form:
                           <input
-                              className="form-control"
-                              type="date"
-                              id="dateOfBirth"
-                              value={endDate}
-                              onChange={(e) => setEndDate(e.target.value)}
-                            />
+                            className="form-control"
+                            type="date"
+                            id="dateOfBirth"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                          />
+                        </div>
                       </div>
+                      <div className="card-footer bg-gray">
+                        <button type="submit" className="btn btn-primary">
+                          Apply
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                  <div className="card-footer bg-gray">
-                      <button type="submit" className="btn btn-primary">
-                        Apply
-                      </button>
-                    </div>
-                </form>
-            </div>
                 </div>
                 <div className="col-auto">
                   <>
@@ -219,7 +211,8 @@ export default function ShowData() {
                           value={promoMsg}
                           onChange={(e) => setPromoMsg(e.target.value)}
                         >
-                          <option selected="selected">None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -240,7 +233,8 @@ export default function ShowData() {
                           value={replied}
                           onChange={(e) => setReplied(e.target.value)}
                         >
-                          <option selected="selected">None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>Yes</option>
                           <option>No</option>
                           <option>None</option>
@@ -254,7 +248,8 @@ export default function ShowData() {
                           value={reply}
                           onChange={(e) => setReply(e.target.value)}
                         >
-                          <option selected="selected">None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -275,7 +270,8 @@ export default function ShowData() {
                           value={status}
                           onChange={(e) => setStatus(e.target.value)}
                         >
-                          <option selected="selected">None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>Banned</option>
                           <option>Sold</option>
                           <option>Active</option>
@@ -290,7 +286,8 @@ export default function ShowData() {
                           value={interest}
                           onChange={(e) => setInterest(e.target.value)}
                         >
-                          <option selected="selected">None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>Yes</option>
                           <option>No</option>
                           <option>None</option>
@@ -304,7 +301,8 @@ export default function ShowData() {
                           value={followup}
                           onChange={(e) => setFollowup(e.target.value)}
                         >
-                          <option selected="selected">None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>Yes</option>
                           <option>No</option>
                           <option>None</option>
@@ -339,8 +337,8 @@ export default function ShowData() {
                 id="allUsers"
                 className="table table-bordered table-striped"
               >
-               <thead>
-                  <tr className='bg-dark text-white'>
+                <thead>
+                  <tr className="bg-dark text-white">
                     <th>Added by</th>
                     <th>Company Name</th>
                     <th>Domain</th>

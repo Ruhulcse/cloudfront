@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { Link } from 'react-router-dom';
 import { config, URL } from '../utils/config';
 import Dashboard from './Dashboard';
 
 function UpdateUserScreen({ location, history }) {
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("admin");
-  const [bkash, setBkash] = useState("");
-  const [amount, setAmount] = useState("0");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('admin');
+  const [bkash, setBkash] = useState('');
+  const [amount, setAmount] = useState('0');
   const [error, setError] = useState(null);
   const [isLoading, setIsloading] = useState(false);
 
@@ -19,33 +18,35 @@ function UpdateUserScreen({ location, history }) {
   let id = searchParams.get('id');
 
   useEffect(() => {
-     try {
-       async function fetchData(){
-         setIsloading(true);
-         let {data} = await axios.get(`${URL}api/v1/users/profile/${id}`,config);
-         console.log(data);
-         setEmail(data.email);
-         setRole(data.role);
-         setBkash(data.bkash);
-         setAmount(data.amount);
-         setName(data.name);
-         setIsloading(false);
-       }
-       fetchData();
-     } catch (error) {
-       console.log(error)
-     }
+    try {
+      async function fetchData() {
+        setIsloading(true);
+        let { data } = await axios.get(
+          `${URL}api/v1/users/profile/${id}`,
+          config
+        );
+        setEmail(data.email);
+        setRole(data.role);
+        setBkash(data.bkash);
+        setAmount(data.amount);
+        setName(data.name);
+        setIsloading(false);
+      }
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   }, [id]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     const userData = {
-       name,
-       email,
-       role,
-       bkash,
-       amount
-     };
+      name,
+      email,
+      role,
+      bkash,
+      amount,
+    };
 
     try {
       const { data } = await axios.put(
@@ -53,7 +54,6 @@ function UpdateUserScreen({ location, history }) {
         userData,
         config
       );
-      console.log(data);
       if (data) {
         history.push('/showuser/');
       }
@@ -62,8 +62,8 @@ function UpdateUserScreen({ location, history }) {
     }
   };
   return (
-   <>
-     <div className="content-wrapper">
+    <>
+      <div className="content-wrapper">
         {/* Content Header (Page header) */}
         <section className="content-header">
           <div className="container-fluid">
@@ -74,7 +74,7 @@ function UpdateUserScreen({ location, history }) {
                 </Link>
               </div>
             </div> */}
-            <Dashboard/>
+            <Dashboard />
           </div>
           {/* /.container-fluid */}
         </section>
@@ -88,7 +88,13 @@ function UpdateUserScreen({ location, history }) {
                 {/* general form elements */}
                 <div className="card card-primary">
                   <div className="card-header">
-                    <h3 className="card-title">{isLoading?(<CircularProgress/>):(<p>Update {name}'s Profile</p>)}</h3>
+                    <h3 className="card-title">
+                      {isLoading ? (
+                        <CircularProgress />
+                      ) : (
+                        <p>Update {name}'s Profile</p>
+                      )}
+                    </h3>
                   </div>
                   {/* {error && <Message>{error}</Message>} */}
                   {/* /.card-header */}
@@ -121,7 +127,7 @@ function UpdateUserScreen({ location, history }) {
                         <label htmlFor="Role">Role</label>
                         <select
                           className="form-control select2"
-                          style={{ width: "100%" }}
+                          style={{ width: '100%' }}
                           value={role}
                           onChange={(e) => setRole(e.target.value)}
                         >
@@ -169,7 +175,7 @@ function UpdateUserScreen({ location, history }) {
           </div>
         </section>
       </div>
-   </>
+    </>
   );
 }
 

@@ -4,10 +4,8 @@ function Dashboard() {
   let data = JSON.parse(localStorage.getItem('user'));
   let userType = data.role;
   let userName = data.name;
-  // console.log(userType);
 
   const logoutHandler = () => {
-    console.log('clicked');
     localStorage.clear();
     window.location.href = '/';
   };

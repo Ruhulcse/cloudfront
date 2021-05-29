@@ -64,7 +64,6 @@ export default function AddData({ history }) {
         } else {
           setAvailemsg(true);
         }
-        console.log(data);
       }
     }
   };
@@ -204,7 +203,6 @@ export default function AddData({ history }) {
             }
           );
           await response.json();
-          console.log(response);
         } catch (err) {
           console.log(err);
         }

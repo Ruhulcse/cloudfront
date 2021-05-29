@@ -15,9 +15,6 @@ export default function ShowUserScreen() {
 
   if (error) return 'An error has occurred: ' + error.message;
 
-  console.log(data);
-  console.log(data.data);
-
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -27,7 +24,6 @@ export default function ShowUserScreen() {
   };
 
   const deleteHandler = async (id) => {
-    console.log(id);
     if (window.confirm('Delete the item?')) {
       await axios.delete(`${URL}api/v1/users/profile/${id}`, config);
       window.location.reload();
