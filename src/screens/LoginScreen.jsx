@@ -6,6 +6,7 @@ import { URL } from '../utils/config';
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errormsg, setErrormsg] = useState('');
   const [loading, setLoading] = useState(false);
 
   const submitHandler = async (e) => {
@@ -24,7 +25,8 @@ export default function LoginScreen() {
         window.location.href = '/dashboard';
       }
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      setErrormsg(error.response.data);
     }
   };
 
@@ -43,6 +45,14 @@ export default function LoginScreen() {
           <h5 className="d-flex justify-content-center">
             {loading ? <CircularProgress /> : <p>Sign in to your account</p>}
           </h5>
+          {errormsg && (
+            <p
+              style={{ color: 'red' }}
+              className="d-flex justify-content-center"
+            >
+              {errormsg}
+            </p>
+          )}
           <div className="form-group">
             <input
               type="email"

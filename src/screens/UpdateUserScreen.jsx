@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link } from 'react-router-dom';
 import { config, URL } from '../utils/config';
 import Dashboard from './Dashboard';
 
@@ -11,6 +10,7 @@ function UpdateUserScreen({ location, history }) {
   const [role, setRole] = useState('admin');
   const [bkash, setBkash] = useState('');
   const [amount, setAmount] = useState('0');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [isLoading, setIsloading] = useState(false);
 
@@ -43,6 +43,7 @@ function UpdateUserScreen({ location, history }) {
     const userData = {
       name,
       email,
+      password,
       role,
       bkash,
       amount,
@@ -121,6 +122,17 @@ function UpdateUserScreen({ location, history }) {
                           placeholder="Enter email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="Password">Password</label>
+                        <input
+                          type="password"
+                          className="form-control"
+                          id="password"
+                          placeholder="Enter Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </div>
                       <div className="form-group">
