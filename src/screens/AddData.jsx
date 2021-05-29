@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import CSVReader from 'react-csv-reader';
 import Dashboard from './Dashboard';
 import { Form } from 'react-bootstrap';
+import lodash from 'lodash';
+import Message from './Message';
 
 export default function AddData({ history }) {
   const [domain, setDomain] = useState('');
@@ -33,6 +35,7 @@ export default function AddData({ history }) {
   const [domainMessage, setDomainMessage] = useState(false);
   const [availemsg, setAvailemsg] = useState(false);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState('');
 
   const submitDomain = async (e) => {
     e.preventDefault();
@@ -66,16 +69,18 @@ export default function AddData({ history }) {
     }
   };
 
-  let csvData;
+  let csvData = [];
 
   let allData = [];
 
   const handleForce = async (data, fileInfo) => {
     allData = await axios.get(`${URL}api/v1/data`, config);
-    console.log(allData.data);
 
-    csvData = data;
-    console.log(data, fileInfo);
+    csvData = data.filter(function (o1) {
+      return lodash.findIndex(allData.data, { domain: o1.domain }) !== -1
+        ? false
+        : true;
+    });
   };
 
   const papaparseOptions = {
@@ -87,8 +92,8 @@ export default function AddData({ history }) {
 
   let formData = {};
 
-  const addBatchData = async () => {
-    csvData.map(async (item) => {
+  const addBatchData = () => {
+    csvData?.map(async (item) => {
       formData = {
         domain: item.domain,
         companyName: item.companyName,
@@ -120,7 +125,8 @@ export default function AddData({ history }) {
           formData,
           config
         );
-        console.log('data from mongodb: ', data);
+
+        setMessage('Csv data added successfully');
         // history.push('/showData');
       } catch (error) {
         setError(error.response.data.message);
@@ -213,30 +219,24 @@ export default function AddData({ history }) {
     <>
       <div className="content-wrapper">
         {/* Content Header (Page header) */}
-        <section className='content-header'>
-          <div className='container-fluid mb-5'>
+        <section className="content-header">
+          <div className="container-fluid mb-5">
             <Dashboard />
           </div>
           {/* /.container-fluid */}
         </section>
 
         {/* Main content */}
-        <section className='content pt-5'>
-          <div className='container-fluid'>
-            <div className='row d-flex justify-content-center'>
-              <div className='col-md-8'>
-                <div className='card card-primary'>
-                  <div className='card-header'>
-                    <h3 className='card-title'>Add Data</h3>
+        <section className="content pt-5">
+          <div className="container-fluid">
+            <div className="row d-flex justify-content-center">
+              <div className="col-md-8">
+                <div className="card card-primary">
+                  <div className="card-header">
+                    <h3 className="card-title">Add Data</h3>
                   </div>
-                  {/* <CSVReader
-                    cssClass='react-csv-input'
-                    className='form-control-file'
-                    label='Select CSV file'
-                    onFileLoaded={handleForce}
-                    parserOptions={papaparseOptions}
-                  />
-                   */}
+                  {message && <Message variant="success">{message}</Message>}
+                  <h5 className="ml-4 mt-2">From CSV</h5>
                   <Form inline className="ml-4 mt-2">
                     <CSVReader
                       className="form-control-file"
@@ -254,6 +254,7 @@ export default function AddData({ history }) {
                   {/* {error && <Message>{error}</Message>} */}
                   {/* /.card-header */}
                   {/* form start */}
+                  <h5 className="ml-4 mt-4">Or Manually</h5>
                   {!available ? (
                     <div>
                       <form onSubmit={submitDomain}>
