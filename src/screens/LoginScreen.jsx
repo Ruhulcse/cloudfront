@@ -6,6 +6,7 @@ import {URL} from "../utils/config"
 export default function LoginScreen() {
   const [email,setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errormsg, setErrormsg] = useState("");
   const [loading, setLoading] = useState(false);
 
   const submitHandler = async(e) =>{
@@ -24,7 +25,8 @@ export default function LoginScreen() {
         window.location.href = "/dashboard";
       }
     } catch (error) {
-      console.log(error);
+      setLoading(false)
+      setErrormsg(error.response.data)
     }
   }
   return (
@@ -50,6 +52,7 @@ export default function LoginScreen() {
           </div>
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white py-5 px-4 shadow sm:rounded-lg sm:px-10">
+              {errormsg&&<p style={{color: "red"}}>{errormsg}</p>}
               <form className="space-y-6" onSubmit={submitHandler}>
                 <div>
                   <label

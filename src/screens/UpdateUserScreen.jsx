@@ -12,6 +12,7 @@ function UpdateUserScreen({ location, history }) {
   const [role, setRole] = useState("admin");
   const [bkash, setBkash] = useState("");
   const [amount, setAmount] = useState("0");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [isLoading, setIsloading] = useState(false);
 
@@ -29,6 +30,7 @@ function UpdateUserScreen({ location, history }) {
          setBkash(data.bkash);
          setAmount(data.amount);
          setName(data.name);
+         setPassword(data.password);
          setIsloading(false);
        }
        fetchData();
@@ -42,6 +44,7 @@ function UpdateUserScreen({ location, history }) {
     const userData = {
        name,
        email,
+       password,
        role,
        bkash,
        amount
@@ -115,6 +118,17 @@ function UpdateUserScreen({ location, history }) {
                           placeholder="Enter email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="Password">Password</label>
+                        <input
+                          type="password"
+                          className="form-control"
+                          id="password"
+                          placeholder="Enter Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </div>
                       <div className="form-group">

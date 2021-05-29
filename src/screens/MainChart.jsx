@@ -91,7 +91,7 @@ function MainChart() {
             let data = user.role === "admin" ? await axios.get(`${URL}api/v1/data`, config): await axios.get(`${URL}api/v1/data/user/${id}`, config);
             setChartData(data.data);
             setcheckChart(data.data);
-            // console.log(data.data);
+            console.log(data.data);
             let total = data.data.length;
             setTotalData(total);
             let totalPromo =0;
@@ -112,7 +112,7 @@ function MainChart() {
                 no++;
               }
             })
-            console.log(yes,no,nuetral)
+            console.log(totalPromo)
             setPromo(totalPromo);
             setReply(totalReply);
             //setting reply chart
