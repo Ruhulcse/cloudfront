@@ -61,7 +61,7 @@ export default function ShowUserScreen() {
           <div className="card-body">
             <div className="row mb-2">
               <div className="col">
-                <LinkContainer to={'/users/new'}>
+                <LinkContainer to={'/dashboard/adduser'}>
                   <Button variant="primary" className="btn">
                     Add New User
                   </Button>
