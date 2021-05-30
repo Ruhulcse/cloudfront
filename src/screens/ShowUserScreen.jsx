@@ -15,14 +15,6 @@ export default function ShowUserScreen() {
 
   if (error) return 'An error has occurred: ' + error.message;
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-
-    // if (keyword) {
-    //   history.push(`/users/search/${keyword}/page/1`);
-    // }
-  };
-
   const deleteHandler = async (id) => {
     if (window.confirm('Delete the item?')) {
       await axios.delete(`${URL}api/v1/users/profile/${id}`, config);
@@ -68,7 +60,7 @@ export default function ShowUserScreen() {
                 </LinkContainer>
               </div>
               <div className="col-auto">
-                <Form onSubmit={submitHandler} inline>
+                {/* <Form onSubmit={submitHandler} inline>
                   <Form.Control
                     type="text"
                     name="q"
@@ -83,7 +75,7 @@ export default function ShowUserScreen() {
                   >
                     Search
                   </Button>
-                </Form>
+                </Form> */}
               </div>
             </div>
             <table id="allUsers" className="table table-bordered table-striped">

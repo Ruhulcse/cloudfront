@@ -82,6 +82,8 @@ export default function AddData({ history }) {
     });
   };
 
+  const isInvalid = domain === '';
+
   const papaparseOptions = {
     header: true,
     dynamicTyping: true,
@@ -216,14 +218,7 @@ export default function AddData({ history }) {
   return (
     <>
       <div className="content-wrapper">
-        {/* Content Header (Page header) */}
-        <section className="content-header">
-          <div className="container-fluid mb-5">
-            <Dashboard />
-          </div>
-          {/* /.container-fluid */}
-        </section>
-
+        <Dashboard />
         {/* Main content */}
         <section className="content pt-5">
           <div className="container-fluid">
@@ -282,7 +277,11 @@ export default function AddData({ history }) {
                           </div>
                         </div>
                         <div className="card-footer">
-                          <button type="submit" className="btn btn-primary">
+                          <button
+                            type="submit"
+                            disabled={isInvalid}
+                            className="btn btn-primary"
+                          >
                             Check Domain
                           </button>
                         </div>

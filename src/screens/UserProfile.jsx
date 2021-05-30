@@ -68,13 +68,7 @@ function UserProfile({ history }) {
     <>
       {/* Content Wrapper. Contains page content */}
       <div className="content-wrapper">
-        {/* Content Header (Page header) */}
-        <section className="content-header">
-          <div className="container-fluid">
-            <Dashboard />
-          </div>
-          {/* /.container-fluid */}
-        </section>
+        <Dashboard />
         {/* Main content */}
         <section className="content pt-5">
           <div className="container-fluid">
