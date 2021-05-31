@@ -1,4 +1,3 @@
-import Dashboard from "./screens/Dashboard";
 import LoginScreen from "./screens/LoginScreen";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Adduser from "./screens/Adduser";

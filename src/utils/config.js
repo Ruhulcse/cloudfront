@@ -1,7 +1,7 @@
-let token = localStorage.getItem('token');
+let token = localStorage.getItem("token");
 
 export const config = {
   headers: { Authorization: `Bearer ${token}` },
 };
 
-export const URL = 'https://cloud1234567.herokuapp.com/';
+export const URL = "https://cloudweb0.herokuapp.com/";

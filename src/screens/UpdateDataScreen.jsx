@@ -30,9 +30,6 @@ function UpdateDataScreen({ location, history }) {
   const [siteEearning, setSiteEearning] = useState('');
   const [followup, setFollowup] = useState('None');
   const [extraNote, setExtraNote] = useState('');
-  const [available, setAvailable] = useState(false);
-  const [domainMessage, setDomainMessage] = useState(false);
-  const [availemsg, setAvailemsg] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsloading] = useState(false);
 
