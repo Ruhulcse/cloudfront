@@ -10,33 +10,28 @@ import { CSVLink } from 'react-csv';
 import { useEffect, useState } from 'react';
 
 export default function ShowData() {
-  const [promoMsg, setPromoMsg] = useState('0');
-  const [replied, setReplied] = useState('None');
-  const [reply, setReply] = useState('0');
-  const [status, setStatus] = useState('None');
-  const [interest, setInterest] = useState('None');
-  const [followup, setFollowup] = useState('None');
+  const [promoMsg, setPromoMsg] = useState('');
+  const [replied, setReplied] = useState('');
+  const [reply, setReply] = useState('');
+  const [status, setStatus] = useState('');
+  const [interest, setInterest] = useState('');
+  const [followup, setFollowup] = useState('');
   const [loading, setLoading] = useState(true);
   const [pageOfItems, setPageOfItems] = useState([]);
-  const [checkData ,setCheckData ] = useState([]);
+  const [checkData, setCheckData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [user, setUser] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const userData = JSON.parse(localStorage.getItem("user"));
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const userData = JSON.parse(localStorage.getItem('user'));
 
-  const submitDate= async(e)=>{
-     console.log(startDate);
-     console.log(endDate);
+  const submitDate = async (e) => {
     e.preventDefault();
-    console.log(checkData)
-   let result = checkData?.filter(
-    (item) =>
-     item.createdDate >= startDate && item.createdDate <= endDate
-  );
-  console.log(result)
-  setPageOfItems(result)
-}
+    let result = checkData?.filter(
+      (item) => item.createdDate >= startDate && item.createdDate <= endDate
+    );
+    setPageOfItems(result);
+  };
   useEffect(() => {
     const fuse = new Fuse(pageOfItems, {
       keys: ['domain'],
@@ -60,7 +55,6 @@ export default function ShowData() {
         setLoading(true);
         let user = JSON.parse(localStorage.getItem('user'));
         let id = user._id;
-        console.log(user);
         let data =
           user.role === 'admin'
             ? await axios.get(`${URL}api/v1/data`, config)
@@ -68,7 +62,6 @@ export default function ShowData() {
         // setPager(pager);
         setPageOfItems(data?.data);
         setCheckData(data?.data);
-        console.log(data?.data);
         setLoading(false);
       }
       fetchUserData();
@@ -78,7 +71,6 @@ export default function ShowData() {
   }, []);
 
   const deleteHandler = async (id) => {
-    console.log(id);
     if (window.confirm('Delete the item?')) {
       await axios.delete(`${URL}api/v1/data/${id}`, config);
       window.location.reload();
@@ -102,21 +94,21 @@ export default function ShowData() {
 
   return (
     <>
-      <div className='content-wrapper'>
+      <div className="content-wrapper">
         {/* Content Header (Page header) */}
-        <section className='content-header'>
+        <section className="content-header">
           <Dashboard />
-          <div className='container-fluid pt-5'>
-            <div className='row mt-3'>
-              <div className='col-sm-6'>
+          <div className="container-fluid pt-5">
+            <div className="row mt-3">
+              <div className="col-sm-6">
                 <h1>All Data</h1>
               </div>
-              <div className='col-sm-6'>
-                <ol className='breadcrumb float-sm-right'>
-                  <li className='breadcrumb-item'>
-                    <Link to='/'>Home</Link>
+              <div className="col-sm-6">
+                <ol className="breadcrumb float-sm-right">
+                  <li className="breadcrumb-item">
+                    <Link to="/">Home</Link>
                   </li>
-                  <li className='breadcrumb-item active'>All Data</li>
+                  <li className="breadcrumb-item active">All Data</li>
                 </ol>
               </div>
             </div>
@@ -124,50 +116,50 @@ export default function ShowData() {
           {/* /.container-fluid */}
         </section>
 
-        <div className='card'>
+        <div className="card">
           {loading ? (
             'Loading...'
           ) : (
-            <div className='card-body'>
-              <div className='row mb-2'>
-                <div className='col'>
-                  {userData.role!=="restricted" &&
-                      <div className='ml-3'>
+            <div className="card-body">
+              <div className="row mb-2">
+                <div className="col">
+                  {userData.role !== 'restricted' && (
+                    <div className="ml-3">
                       <LinkContainer to={'/dashboard/addData'}>
-                        <Button variant='primary' className='btn mr-4'>
+                        <Button variant="primary" className="btn mr-4">
                           Add Data
                         </Button>
                       </LinkContainer>
                       <CSVLink
                         data={pageOfItems}
                         filename={'data-file.csv'}
-                        className='btn btn-outline-primary'
+                        className="btn btn-outline-primary"
                       >
-                        <i className='fas fa-file-download'></i> Export to CSV
+                        <i className="fas fa-file-download"></i> Export to CSV
                       </CSVLink>
-                      
-                    </div>}
-                  <div className='col mt-2'>
+                    </div>
+                  )}
+                  <div className="col mt-2">
                     <Form inline>
                       <Form.Control
-                        type='text'
+                        type="text"
                         // name="q"
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder='Search...'
-                        className='mr-sm-2'
+                        placeholder="Search..."
+                        className="mr-sm-2"
                       ></Form.Control>{' '}
                       <Button
-                        type='submit'
-                        variant='primary'
-                        size='sm'
-                        className='p-2'
+                        type="submit"
+                        variant="primary"
+                        size="sm"
+                        className="p-2"
                       >
                         Search
                       </Button>
                       <Button
-                        size='sm'
-                        variant='danger'
-                        className='p-2 ml-1'
+                        size="sm"
+                        variant="danger"
+                        className="p-2 ml-1"
                         onClick={() => window.location.reload()}
                       >
                         Reset
@@ -175,51 +167,52 @@ export default function ShowData() {
                     </Form>
                   </div>
                   <div className="container">
-                <form onSubmit={submitDate}>
-                  <div className="row">
-                      <div className="col-md-4">
-                          To: 
+                    <form onSubmit={submitDate}>
+                      <div className="row">
+                        <div className="col-md-4">
+                          To:
                           <input
-                              className="form-control"
-                              type="date"
-                              id="dateOfBirth"
-                              value={startDate}
-                              onChange={(e) => setStartDate(e.target.value)}
-                            />
-                      </div>
-                      <div className="col-md-4">
-                        Form: 
+                            className="form-control"
+                            type="date"
+                            id="dateOfBirth"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                          />
+                        </div>
+                        <div className="col-md-4">
+                          Form:
                           <input
-                              className="form-control"
-                              type="date"
-                              id="dateOfBirth"
-                              value={endDate}
-                              onChange={(e) => setEndDate(e.target.value)}
-                            />
+                            className="form-control"
+                            type="date"
+                            id="dateOfBirth"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                          />
+                        </div>
                       </div>
+                      <div className="card-footer bg-gray">
+                        <button type="submit" className="btn btn-primary">
+                          Apply
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                  <div className="card-footer bg-gray">
-                      <button type="submit" className="btn btn-primary">
-                        Apply
-                      </button>
-                    </div>
-                </form>
-            </div>
                 </div>
-                <div className='col-auto'>
+                <div className="col-auto">
                   <>
                     <strong>Filter By</strong>
                     <br />
-                    <div className='col-md-12 form-inline'>
-                      <div className='form-group mr-1'>
-                        <label htmlFor='Desired Country'>Promo Message</label>
+                    <div className="col-md-12 form-inline">
+                      <div className="form-group mr-1">
+                        <label htmlFor="Desired Country">Promo Message</label>
                         <select
-                          className='form-control select2'
+                          className="form-control select2"
                           style={{ width: '100%' }}
                           value={promoMsg}
                           onChange={(e) => setPromoMsg(e.target.value)}
                         >
-                          <option selected='selected'>None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -232,29 +225,31 @@ export default function ShowData() {
                           <option>10</option>
                         </select>
                       </div>
-                      <div className='form-group mr-1'>
-                        <label htmlFor='District'>Replied</label>
+                      <div className="form-group mr-1">
+                        <label htmlFor="District">Replied</label>
                         <select
-                          className='form-control select2'
+                          className="form-control select2"
                           style={{ width: '100%' }}
                           value={replied}
                           onChange={(e) => setReplied(e.target.value)}
                         >
-                          <option selected='selected'>None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>Yes</option>
                           <option>No</option>
                           <option>None</option>
                         </select>
                       </div>
-                      <div className='form-group mr-1'>
-                        <label htmlFor='Desired Country'>Reply</label>
+                      <div className="form-group mr-1">
+                        <label htmlFor="Desired Country">Reply</label>
                         <select
-                          className='form-control select2'
+                          className="form-control select2"
                           style={{ width: '100%' }}
                           value={reply}
                           onChange={(e) => setReply(e.target.value)}
                         >
-                          <option selected='selected'>None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>1</option>
                           <option>2</option>
                           <option>3</option>
@@ -267,44 +262,47 @@ export default function ShowData() {
                           <option>10</option>
                         </select>
                       </div>
-                      <div className='form-group mr-1'>
-                        <label htmlFor='District'>Status</label>
+                      <div className="form-group mr-1">
+                        <label htmlFor="District">Status</label>
                         <select
-                          className='form-control select2'
+                          className="form-control select2"
                           style={{ width: '100%' }}
                           value={status}
                           onChange={(e) => setStatus(e.target.value)}
                         >
-                          <option selected='selected'>None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>Banned</option>
                           <option>Sold</option>
                           <option>Active</option>
                           <option>None</option>
                         </select>
                       </div>
-                      <div className='form-group mr-1'>
-                        <label htmlFor='District'>Interest</label>
+                      <div className="form-group mr-1">
+                        <label htmlFor="District">Interest</label>
                         <select
-                          className='form-control select2'
+                          className="form-control select2"
                           style={{ width: '100%' }}
                           value={interest}
                           onChange={(e) => setInterest(e.target.value)}
                         >
-                          <option selected='selected'>None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>Yes</option>
                           <option>No</option>
                           <option>None</option>
                         </select>
                       </div>
-                      <div className='form-group mr-1'>
-                        <label htmlFor='District'>Followup</label>
+                      <div className="form-group mr-1">
+                        <label htmlFor="District">Followup</label>
                         <select
-                          className='form-control select2'
+                          className="form-control select2"
                           style={{ width: '100%' }}
                           value={followup}
                           onChange={(e) => setFollowup(e.target.value)}
                         >
-                          <option selected='selected'>None</option>
+                          <option selected="selected">-</option>
+                          <option>None</option>
                           <option>Yes</option>
                           <option>No</option>
                           <option>None</option>
@@ -313,9 +311,9 @@ export default function ShowData() {
 
                       <Col>
                         <Button
-                          variant='outline-primary'
-                          className='mt-4'
-                          size='sm'
+                          variant="outline-primary"
+                          className="mt-4"
+                          size="sm"
                           onClick={() => {
                             filterApplied();
                           }}
@@ -323,9 +321,9 @@ export default function ShowData() {
                           Go
                         </Button>
                         <Button
-                          variant='danger'
-                          size='sm'
-                          className='ml-1 mt-4'
+                          variant="danger"
+                          size="sm"
+                          className="ml-1 mt-4"
                           onClick={() => window.location.reload()}
                         >
                           Reset
@@ -336,11 +334,11 @@ export default function ShowData() {
                 </div>
               </div>
               <table
-                id='allUsers'
-                className='table table-bordered table-striped'
+                id="allUsers"
+                className="table table-bordered table-striped"
               >
-               <thead>
-                  <tr className='bg-dark text-white'>
+                <thead>
+                  <tr className="bg-dark text-white">
                     <th>Added by</th>
                     <th>Company Name</th>
                     <th>Domain</th>
@@ -354,7 +352,7 @@ export default function ShowData() {
                   </tr>
                 </thead>
 
-                <tbody >
+                <tbody>
                   {pageOfItems?.map((user) => (
                     <tr key={user._id}>
                       <td>{user.userName}</td>
@@ -362,33 +360,41 @@ export default function ShowData() {
                       <td>{user.domain}</td>
                       <td>{user.email}</td>
                       <td>
-                       <a href={user.contactUrl} target="blank">Link</a>
+                        <a href={user.contactUrl} target="blank">
+                          Link
+                        </a>
                       </td>
                       <td>
-                       <a href={user.fbUrl} target="blank">Link</a>
+                        <a href={user.fbUrl} target="blank">
+                          Link
+                        </a>
                       </td>
                       <td>
-                       <a href={user.igUrl} target="blank">Link</a>
+                        <a href={user.igUrl} target="blank">
+                          Link
+                        </a>
                       </td>
                       <td>
-                       <a href={user.twitterUrl} target="blank">Link</a>
+                        <a href={user.twitterUrl} target="blank">
+                          Link
+                        </a>
                       </td>
                       <td>{user.phone}</td>
                       <td>
                         <LinkContainer to={`/updatedata?id=${user._id}`}>
                           <Button
-                            variant='warning'
-                            className='btn-sm ml-2 mr-1 '
+                            variant="warning"
+                            className="btn-sm ml-2 mr-1 "
                           >
-                            <i className='fas fa-edit'></i>
+                            <i className="fas fa-edit"></i>
                           </Button>
                         </LinkContainer>{' '}
                         <Button
-                          variant='danger'
-                          className='btn-sm'
+                          variant="danger"
+                          className="btn-sm"
                           onClick={() => deleteHandler(user._id)}
                         >
-                          <i className='fas fa-trash-alt'></i>
+                          <i className="fas fa-trash-alt"></i>
                         </Button>
                       </td>
                     </tr>

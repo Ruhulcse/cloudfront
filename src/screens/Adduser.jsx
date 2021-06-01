@@ -1,39 +1,37 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Dashboard from "./Dashboard"
-import {URL,config} from "../utils/config"
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Dashboard from './Dashboard';
+import { URL, config } from '../utils/config';
 import axios from 'axios';
 
-function Adduser({history}) {
+function Adduser({ history }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState('admin');
+  const [password, setPassword] = useState('');
+  const [bkash, setBkash] = useState('');
+  const [amount, setAmount] = useState('0');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const user = { name, email, role, password, bkash, amount };
+    try {
+      setLoading(true);
+      const { data } = await axios.post(`${URL}api/v1/users/`, user, config);
+      if (data) {
+        setLoading(false);
+        history.push('/showuser');
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
 
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [role, setRole] = useState("admin");
-    const [password, setPassword] = useState("");
-    const [bkash, setBkash] = useState("");
-    const [amount, setAmount] = useState("0");
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const submitHandler = async (e) => {
-        e.preventDefault();
-        const user = { name, email, role, password ,bkash, amount};
-        console.log(user);
-        try {
-          setLoading(true);
-          const { data } = await axios.post(`${URL}api/v1/users/`, user, config);
-          if (data) {
-            setLoading(false);
-            history.push("/showuser");
-          }
-        } catch (error) {
-          setError(error.response.data.message);
-        }
-      };
-
-    return (
-        <div>
-          <div className="content-wrapper">
+  return (
+    <div>
+      <div className="content-wrapper">
         {/* Content Header (Page header) */}
         <section className="content-header">
           <div className="container-fluid">
@@ -44,7 +42,7 @@ function Adduser({history}) {
                 </Link>
               </div>
             </div> */}
-            <Dashboard/>
+            <Dashboard />
           </div>
           {/* /.container-fluid */}
         </section>
@@ -58,7 +56,9 @@ function Adduser({history}) {
                 {/* general form elements */}
                 <div className="card card-primary">
                   <div className="card-header">
-                    <h3 className="card-title">{loading?(<CircularProgress/>):(<p>Add a new user</p>)}</h3>
+                    <h3 className="card-title">
+                      {loading ? <CircularProgress /> : <p>Add a new user</p>}
+                    </h3>
                   </div>
                   {error && <p>{error}</p>}
                   {/* /.card-header */}
@@ -102,7 +102,7 @@ function Adduser({history}) {
                         <label htmlFor="Role">Role</label>
                         <select
                           className="form-control select2"
-                          style={{ width: "100%" }}
+                          style={{ width: '100%' }}
                           value={role}
                           onChange={(e) => setRole(e.target.value)}
                         >
@@ -150,8 +150,8 @@ function Adduser({history}) {
           </div>
         </section>
       </div>
-        </div>
-    )
+    </div>
+  );
 }
 
-export default Adduser
+export default Adduser;

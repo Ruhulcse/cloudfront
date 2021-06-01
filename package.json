@@ -16,6 +16,7 @@
     "fusioncharts": "^3.17.0",
     "google-spreadsheet": "^3.1.15",
     "jquery": "^3.6.0",
+    "lodash": "^4.17.21",
     "popper": "^1.0.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",

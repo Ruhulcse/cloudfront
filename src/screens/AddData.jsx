@@ -5,10 +5,12 @@ import { Link } from 'react-router-dom';
 import CSVReader from 'react-csv-reader';
 import Dashboard from './Dashboard';
 import { Form } from 'react-bootstrap';
+import lodash from 'lodash';
+import Message from './Message';
 
 export default function AddData({ history }) {
   const [domain, setDomain] = useState('');
-  const [userName, setUserName ] = useState('');
+  const [userName, setUserName] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
   const [contactUrl, setContactUrl] = useState('');
@@ -33,7 +35,7 @@ export default function AddData({ history }) {
   const [domainMessage, setDomainMessage] = useState(false);
   const [availemsg, setAvailemsg] = useState(false);
   const [error, setError] = useState(null);
-
+  const [message, setMessage] = useState('');
 
   const submitDomain = async (e) => {
     e.preventDefault();
@@ -62,16 +64,22 @@ export default function AddData({ history }) {
         } else {
           setAvailemsg(true);
         }
-        console.log(data);
       }
     }
   };
 
-  let csvData;
+  let csvData = [];
 
-  const handleForce = (data, fileInfo) => {
-    csvData = data;
-    console.log(data, fileInfo);
+  let allData = [];
+
+  const handleForce = async (data, fileInfo) => {
+    allData = await axios.get(`${URL}api/v1/data`, config);
+
+    csvData = data.filter(function (o1) {
+      return lodash.findIndex(allData.data, { domain: o1.domain }) !== -1
+        ? false
+        : true;
+    });
   };
 
   const papaparseOptions = {
@@ -83,8 +91,8 @@ export default function AddData({ history }) {
 
   let formData = {};
 
-  const addBatchData = async () => {
-    csvData.map(async (item) => {
+  const addBatchData = () => {
+    csvData?.map(async (item) => {
       formData = {
         domain: item.domain,
         companyName: item.companyName,
@@ -107,6 +115,7 @@ export default function AddData({ history }) {
         siteEearning: item.siteEearning,
         followup: item.followup,
         extraNote: item.extraNote,
+        userName: item.userName,
       };
 
       try {
@@ -115,7 +124,8 @@ export default function AddData({ history }) {
           formData,
           config
         );
-        console.log('data from mongodb: ', data);
+
+        setMessage('Csv data added successfully');
         // history.push('/showData');
       } catch (error) {
         setError(error.response.data.message);
@@ -125,33 +135,33 @@ export default function AddData({ history }) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    let userData = JSON.parse(localStorage.getItem("user"));
+    let userData = JSON.parse(localStorage.getItem('user'));
     let userName = userData.name;
     let createdDate = new Date().toISOString().split('T')[0];
     const Formdata = {
-     domain,
-     userName,
-     companyName,
-     email,
-     contactUrl,
-     fbUrl,
-     igUrl,
-     twitterUrl,
-     phone,
-     promoMsg,
-     replaid,
-     reply,
-     status,
-     interest,
-     countryCode,
-     storeTheme,
-     storeCreated,
-     createdDate,
-     productSold,
-     rank,
-     siteEearning,
-     followup,
-     extraNote
+      domain,
+      userName,
+      companyName,
+      email,
+      contactUrl,
+      fbUrl,
+      igUrl,
+      twitterUrl,
+      phone,
+      promoMsg,
+      replaid,
+      reply,
+      status,
+      interest,
+      countryCode,
+      storeTheme,
+      storeCreated,
+      createdDate,
+      productSold,
+      rank,
+      siteEearning,
+      followup,
+      extraNote,
     };
     try {
       const { data } = await axios.post(`${URL}api/v1/data`, Formdata, config);
@@ -191,13 +201,12 @@ export default function AddData({ history }) {
                 ],
               ]),
             }
-            )
-            await response.json();
-            console.log(response);
-         } catch (err) {
-           console.log(err)
-         }
-        history.push("/showData");
+          );
+          await response.json();
+        } catch (err) {
+          console.log(err);
+        }
+        history.push('/showData');
       }
     } catch (error) {
       setError(error.response.data.message);
@@ -206,42 +215,36 @@ export default function AddData({ history }) {
 
   return (
     <>
-      <div className='content-wrapper'>
+      <div className="content-wrapper">
         {/* Content Header (Page header) */}
-        <section className='content-header'>
-          <div className='container-fluid mb-5'>
+        <section className="content-header">
+          <div className="container-fluid mb-5">
             <Dashboard />
           </div>
           {/* /.container-fluid */}
         </section>
 
         {/* Main content */}
-        <section className='content pt-5'>
-          <div className='container-fluid'>
-            <div className='row d-flex justify-content-center'>
-              <div className='col-md-8'>
-                <div className='card card-primary'>
-                  <div className='card-header'>
-                    <h3 className='card-title'>Add Data</h3>
+        <section className="content pt-5">
+          <div className="container-fluid">
+            <div className="row d-flex justify-content-center">
+              <div className="col-md-8">
+                <div className="card card-primary">
+                  <div className="card-header">
+                    <h3 className="card-title">Add Data</h3>
                   </div>
-                  {/* <CSVReader
-                    cssClass='react-csv-input'
-                    className='form-control-file'
-                    label='Select CSV file'
-                    onFileLoaded={handleForce}
-                    parserOptions={papaparseOptions}
-                  />
-                   */}
-                  <Form inline className='ml-4 mt-2'>
+                  {message && <Message variant="success">{message}</Message>}
+                  <h5 className="ml-4 mt-2">From CSV</h5>
+                  <Form inline className="ml-4 mt-2">
                     <CSVReader
-                      className='form-control-file'
+                      className="form-control-file"
                       onFileLoaded={handleForce}
                       parserOptions={papaparseOptions}
                     />
                     <button
-                      type='button'
+                      type="button"
                       onClick={addBatchData}
-                      className='btn btn-primary'
+                      className="btn btn-primary"
                     >
                       Add Data
                     </button>
@@ -249,11 +252,12 @@ export default function AddData({ history }) {
                   {/* {error && <Message>{error}</Message>} */}
                   {/* /.card-header */}
                   {/* form start */}
+                  <h5 className="ml-4 mt-4">Or Manually</h5>
                   {!available ? (
                     <div>
                       <form onSubmit={submitDomain}>
-                        <div className='card-body'>
-                          <div className='row'>
+                        <div className="card-body">
+                          <div className="row">
                             {domainMessage && (
                               <p style={{ color: 'red' }}>unsupported font</p>
                             )}
@@ -262,14 +266,14 @@ export default function AddData({ history }) {
                                 Domain Already exists in database
                               </p>
                             )}
-                            <div className='col-md-12'>
-                              <div className='form-group'>
-                                <label htmlFor='Name'>Domain</label>
+                            <div className="col-md-12">
+                              <div className="form-group">
+                                <label htmlFor="Name">Domain</label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='name'
-                                  placeholder='Enter name'
+                                  type="text"
+                                  className="form-control"
+                                  id="name"
+                                  placeholder="Enter name"
                                   value={domain}
                                   onChange={(e) => setDomain(e.target.value)}
                                 />
@@ -277,8 +281,8 @@ export default function AddData({ history }) {
                             </div>
                           </div>
                         </div>
-                        <div className='card-footer'>
-                          <button type='submit' className='btn btn-primary'>
+                        <div className="card-footer">
+                          <button type="submit" className="btn btn-primary">
                             Check Domain
                           </button>
                         </div>
@@ -287,30 +291,30 @@ export default function AddData({ history }) {
                   ) : (
                     <div>
                       <form onSubmit={submitHandler}>
-                        <div className='card-body'>
-                          <div className='row'>
+                        <div className="card-body">
+                          <div className="row">
                             {/* /.col */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Name'>Domain</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Name">Domain</label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='name'
-                                  placeholder='Enter name'
+                                  type="text"
+                                  className="form-control"
+                                  id="name"
+                                  placeholder="Enter name"
                                   value={domain}
                                   onChange={(e) => setDomain(e.target.value)}
                                 />
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Passport'>Company Name</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Passport">Company Name</label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='companyname'
-                                  placeholder='Enter Company name'
+                                  type="text"
+                                  className="form-control"
+                                  id="companyname"
+                                  placeholder="Enter Company name"
                                   value={companyName}
                                   onChange={(e) =>
                                     setCompanyName(e.target.value)
@@ -321,29 +325,29 @@ export default function AddData({ history }) {
                             {/* /.col */}
 
                             {/* /.col */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Email'>Email</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Email">Email</label>
                                 <input
-                                  type='email'
-                                  className='form-control'
-                                  id='email'
-                                  placeholder='Enter Email'
+                                  type="email"
+                                  className="form-control"
+                                  id="email"
+                                  placeholder="Enter Email"
                                   value={email}
                                   onChange={(e) => setEmail(e.target.value)}
                                 />
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Occupation'>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Occupation">
                                   Contact page URL
                                 </label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='occupation'
-                                  placeholder='Enter contact page url'
+                                  type="text"
+                                  className="form-control"
+                                  id="occupation"
+                                  placeholder="Enter contact page url"
                                   value={contactUrl}
                                   onChange={(e) =>
                                     setContactUrl(e.target.value)
@@ -354,29 +358,29 @@ export default function AddData({ history }) {
                             {/* /.col */}
 
                             {/* /.row */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Mobile Number'>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Mobile Number">
                                   Facebook Page URL
                                 </label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='mobileNumber'
-                                  placeholder='Enter Facebook Page URL'
+                                  type="text"
+                                  className="form-control"
+                                  id="mobileNumber"
+                                  placeholder="Enter Facebook Page URL"
                                   value={fbUrl}
                                   onChange={(e) => setFbUrl(e.target.value)}
                                 />
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='IG page URL'>IG page URL</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="IG page URL">IG page URL</label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='fathersName'
-                                  placeholder='Enter IG page URL'
+                                  type="text"
+                                  className="form-control"
+                                  id="fathersName"
+                                  placeholder="Enter IG page URL"
                                   value={igUrl}
                                   onChange={(e) => setIgUrl(e.target.value)}
                                 />
@@ -385,16 +389,16 @@ export default function AddData({ history }) {
                             {/* /.row */}
 
                             {/* /.row */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
+                            <div className="col-md-6">
+                              <div className="form-group">
                                 <label htmlFor="Father's Mobile">
                                   Twitter URL
                                 </label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='fathersMobile'
-                                  placeholder='Enter Twitter URL'
+                                  type="text"
+                                  className="form-control"
+                                  id="fathersMobile"
+                                  placeholder="Enter Twitter URL"
                                   value={twitterUrl}
                                   onChange={(e) =>
                                     setTwitterUrl(e.target.value)
@@ -402,14 +406,14 @@ export default function AddData({ history }) {
                                 />
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Village'>Phone Number</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Village">Phone Number</label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='village'
-                                  placeholder='Enter Phone Number'
+                                  type="text"
+                                  className="form-control"
+                                  id="village"
+                                  placeholder="Enter Phone Number"
                                   value={phone}
                                   onChange={(e) => setPhone(e.target.value)}
                                 />
@@ -418,18 +422,18 @@ export default function AddData({ history }) {
                             {/* /.row */}
 
                             {/* /.row */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Desired Country'>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Desired Country">
                                   Promo Message
                                 </label>
                                 <select
-                                  className='form-control select2'
+                                  className="form-control select2"
                                   style={{ width: '100%' }}
                                   value={promoMsg}
                                   onChange={(e) => setPromoMsg(e.target.value)}
                                 >
-                                  <option selected='selected'>None</option>
+                                  <option selected="selected">None</option>
                                   <option>1</option>
                                   <option>2</option>
                                   <option>3</option>
@@ -443,16 +447,16 @@ export default function AddData({ history }) {
                                 </select>
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='District'>Replied</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="District">Replied</label>
                                 <select
-                                  className='form-control select2'
+                                  className="form-control select2"
                                   style={{ width: '100%' }}
                                   value={replaid}
                                   onChange={(e) => setReplaid(e.target.value)}
                                 >
-                                  <option selected='selected'>None</option>
+                                  <option selected="selected">None</option>
                                   <option>Yes</option>
                                   <option>No</option>
                                   <option>None</option>
@@ -462,16 +466,16 @@ export default function AddData({ history }) {
                             {/* /.row */}
 
                             {/* /.row */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Desired Country'>Reply</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Desired Country">Reply</label>
                                 <select
-                                  className='form-control select2'
+                                  className="form-control select2"
                                   style={{ width: '100%' }}
                                   value={reply}
                                   onChange={(e) => setReply(e.target.value)}
                                 >
-                                  <option selected='selected'>None</option>
+                                  <option selected="selected">None</option>
                                   <option>1</option>
                                   <option>2</option>
                                   <option>3</option>
@@ -485,16 +489,16 @@ export default function AddData({ history }) {
                                 </select>
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='District'>Status</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="District">Status</label>
                                 <select
-                                  className='form-control select2'
+                                  className="form-control select2"
                                   style={{ width: '100%' }}
                                   value={status}
                                   onChange={(e) => setStatus(e.target.value)}
                                 >
-                                  <option selected='selected'>None</option>
+                                  <option selected="selected">None</option>
                                   <option>Banned</option>
                                   <option>Sold</option>
                                   <option>Active</option>
@@ -505,32 +509,32 @@ export default function AddData({ history }) {
                             {/* /.row */}
 
                             {/* /.row */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='District'>Interest</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="District">Interest</label>
                                 <select
-                                  className='form-control select2'
+                                  className="form-control select2"
                                   style={{ width: '100%' }}
                                   value={interest}
                                   onChange={(e) => setInterest(e.target.value)}
                                 >
-                                  <option selected='selected'>None</option>
+                                  <option selected="selected">None</option>
                                   <option>Yes</option>
                                   <option>No</option>
                                   <option>None</option>
                                 </select>
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Reference Thana'>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Reference Thana">
                                   Country Code
                                 </label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='refThana'
-                                  placeholder='Enter Country Code'
+                                  type="text"
+                                  className="form-control"
+                                  id="refThana"
+                                  placeholder="Enter Country Code"
                                   value={countryCode}
                                   onChange={(e) =>
                                     setCountryCode(e.target.value)
@@ -541,14 +545,14 @@ export default function AddData({ history }) {
                             {/* /.row */}
 
                             {/* /.row */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Facebook'>Store Theme</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Facebook">Store Theme</label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='fb'
-                                  placeholder='Enter store theme'
+                                  type="text"
+                                  className="form-control"
+                                  id="fb"
+                                  placeholder="Enter store theme"
                                   value={storeTheme}
                                   onChange={(e) =>
                                     setStoreTheme(e.target.value)
@@ -556,15 +560,15 @@ export default function AddData({ history }) {
                                 />
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Date Of Birth'>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Date Of Birth">
                                   Store Created
                                 </label>
                                 <input
-                                  className='form-control'
-                                  type='date'
-                                  id='dateOfBirth'
+                                  className="form-control"
+                                  type="date"
+                                  id="dateOfBirth"
                                   value={storeCreated}
                                   onChange={(e) =>
                                     setStoreCreated(e.target.value)
@@ -575,14 +579,14 @@ export default function AddData({ history }) {
                             {/* /.row */}
 
                             {/* /.row */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Facebook'>Product Sold</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Facebook">Product Sold</label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='fb'
-                                  placeholder='Enter product sold'
+                                  type="text"
+                                  className="form-control"
+                                  id="fb"
+                                  placeholder="Enter product sold"
                                   value={productSold}
                                   onChange={(e) =>
                                     setProductSold(e.target.value)
@@ -590,14 +594,14 @@ export default function AddData({ history }) {
                                 />
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Facebook'>Rank</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Facebook">Rank</label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='fb'
-                                  placeholder='Enter Rank'
+                                  type="text"
+                                  className="form-control"
+                                  id="fb"
+                                  placeholder="Enter Rank"
                                   value={rank}
                                   onChange={(e) => setRank(e.target.value)}
                                 />
@@ -606,14 +610,14 @@ export default function AddData({ history }) {
                             {/* /.row */}
 
                             {/* /.row */}
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='Facebook'>Site Earnings</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="Facebook">Site Earnings</label>
                                 <input
-                                  type='text'
-                                  className='form-control'
-                                  id='fb'
-                                  placeholder='Enter site earnings '
+                                  type="text"
+                                  className="form-control"
+                                  id="fb"
+                                  placeholder="Enter site earnings "
                                   value={siteEearning}
                                   onChange={(e) =>
                                     setSiteEearning(e.target.value)
@@ -621,16 +625,16 @@ export default function AddData({ history }) {
                                 />
                               </div>
                             </div>
-                            <div className='col-md-6'>
-                              <div className='form-group'>
-                                <label htmlFor='District'>Followup</label>
+                            <div className="col-md-6">
+                              <div className="form-group">
+                                <label htmlFor="District">Followup</label>
                                 <select
-                                  className='form-control select2'
+                                  className="form-control select2"
                                   style={{ width: '100%' }}
                                   value={followup}
                                   onChange={(e) => setFollowup(e.target.value)}
                                 >
-                                  <option selected='selected'>None</option>
+                                  <option selected="selected">None</option>
                                   <option>Yes</option>
                                   <option>No</option>
                                   <option>None</option>
@@ -640,14 +644,14 @@ export default function AddData({ history }) {
                             {/* /.row */}
 
                             {/* /.row */}
-                            <div className='col-md-12'>
-                              <div className='form-group'>
-                                <label htmlFor='Facebook'>Extra Note</label>
+                            <div className="col-md-12">
+                              <div className="form-group">
+                                <label htmlFor="Facebook">Extra Note</label>
                                 <textarea
-                                  type='text'
-                                  className='form-control'
-                                  id='fb'
-                                  placeholder='Write extra notes'
+                                  type="text"
+                                  className="form-control"
+                                  id="fb"
+                                  placeholder="Write extra notes"
                                   value={extraNote}
                                   onChange={(e) => setExtraNote(e.target.value)}
                                 />
@@ -657,8 +661,8 @@ export default function AddData({ history }) {
                           </div>
                         </div>
                         {/* /.card-body */}
-                        <div className='card-footer'>
-                          <button type='submit' className='btn btn-primary'>
+                        <div className="card-footer">
+                          <button type="submit" className="btn btn-primary">
                             Submit
                           </button>
                         </div>
