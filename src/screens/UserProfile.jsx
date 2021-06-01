@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { URL, config } from '../utils/config';
-import { Link } from 'react-router-dom';
 import userProfile from '../assets/images/user.png';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dashboard from './Dashboard';
@@ -68,13 +67,7 @@ function UserProfile({ history }) {
     <>
       {/* Content Wrapper. Contains page content */}
       <div className="content-wrapper">
-        {/* Content Header (Page header) */}
-        <section className="content-header">
-          <div className="container-fluid">
-            <Dashboard />
-          </div>
-          {/* /.container-fluid */}
-        </section>
+        <Dashboard />
         {/* Main content */}
         <section className="content pt-5">
           <div className="container-fluid">

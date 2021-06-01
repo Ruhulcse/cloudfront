@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { URL, config } from '../utils/config';
-import { Link } from 'react-router-dom';
 import CSVReader from 'react-csv-reader';
 import Dashboard from './Dashboard';
 import { Form } from 'react-bootstrap';
@@ -10,7 +9,6 @@ import Message from './Message';
 
 export default function AddData({ history }) {
   const [domain, setDomain] = useState('');
-  const [userName, setUserName] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
   const [contactUrl, setContactUrl] = useState('');
@@ -19,7 +17,6 @@ export default function AddData({ history }) {
   const [twitterUrl, setTwitterUrl] = useState('');
   const [phone, setPhone] = useState('');
   const [promoMsg, setPromoMsg] = useState('0');
-  const [replaid, setReplaid] = useState('None');
   const [reply, setReply] = useState('0');
   const [status, setStatus] = useState('None');
   const [interest, setInterest] = useState('None');
@@ -82,6 +79,8 @@ export default function AddData({ history }) {
     });
   };
 
+  const isInvalid = domain === '';
+
   const papaparseOptions = {
     header: true,
     dynamicTyping: true,
@@ -138,6 +137,7 @@ export default function AddData({ history }) {
     let userData = JSON.parse(localStorage.getItem('user'));
     let userName = userData.name;
     let createdDate = new Date().toISOString().split('T')[0];
+    let replaid = reply!==0?"Yes":"None";
     const Formdata = {
       domain,
       userName,
@@ -163,6 +163,7 @@ export default function AddData({ history }) {
       followup,
       extraNote,
     };
+    console.log(Formdata)
     try {
       const { data } = await axios.post(`${URL}api/v1/data`, Formdata, config);
       if (data) {
@@ -216,14 +217,7 @@ export default function AddData({ history }) {
   return (
     <>
       <div className="content-wrapper">
-        {/* Content Header (Page header) */}
-        <section className="content-header">
-          <div className="container-fluid mb-5">
-            <Dashboard />
-          </div>
-          {/* /.container-fluid */}
-        </section>
-
+        <Dashboard />
         {/* Main content */}
         <section className="content pt-5">
           <div className="container-fluid">
@@ -282,7 +276,11 @@ export default function AddData({ history }) {
                           </div>
                         </div>
                         <div className="card-footer">
-                          <button type="submit" className="btn btn-primary">
+                          <button
+                            type="submit"
+                            disabled={isInvalid}
+                            className="btn btn-primary"
+                          >
                             Check Domain
                           </button>
                         </div>
@@ -447,7 +445,7 @@ export default function AddData({ history }) {
                                 </select>
                               </div>
                             </div>
-                            <div className="col-md-6">
+                            {/* <div className="col-md-6">
                               <div className="form-group">
                                 <label htmlFor="District">Replied</label>
                                 <select
@@ -462,7 +460,7 @@ export default function AddData({ history }) {
                                   <option>None</option>
                                 </select>
                               </div>
-                            </div>
+                            </div> */}
                             {/* /.row */}
 
                             {/* /.row */}

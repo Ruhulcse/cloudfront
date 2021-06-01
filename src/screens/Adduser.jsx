@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dashboard from './Dashboard';
 import { URL, config } from '../utils/config';
@@ -33,20 +32,7 @@ function Adduser({ history }) {
     <div>
       <div className="content-wrapper">
         {/* Content Header (Page header) */}
-        <section className="content-header">
-          <div className="container-fluid">
-            {/* <div className="row mb-2 pt-5">
-              <div className="col-sm-6">
-                <Link to="/dashboard" className="btn btn-primary mb-2">
-                  Go Back
-                </Link>
-              </div>
-            </div> */}
-            <Dashboard />
-          </div>
-          {/* /.container-fluid */}
-        </section>
-
+        <Dashboard />
         {/* Main content */}
         <section className="content pt-5">
           <div className="container-fluid">

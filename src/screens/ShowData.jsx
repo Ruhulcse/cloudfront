@@ -1,8 +1,7 @@
-import { useQuery } from 'react-query';
 import { config, URL } from '../utils/config';
 import axios from 'axios';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Button, Col, Form,} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Fuse from 'fuse.js';
@@ -20,7 +19,6 @@ export default function ShowData() {
   const [pageOfItems, setPageOfItems] = useState([]);
   const [checkData, setCheckData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [user, setUser] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const userData = JSON.parse(localStorage.getItem('user'));

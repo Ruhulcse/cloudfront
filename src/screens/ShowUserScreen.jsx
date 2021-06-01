@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { config, URL } from '../utils/config';
 import axios from 'axios';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Button, Form } from 'react-bootstrap';
+import { Button,} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Dashboard from './Dashboard';
 
@@ -14,14 +14,6 @@ export default function ShowUserScreen() {
   if (isLoading) return 'Loading...';
 
   if (error) return 'An error has occurred: ' + error.message;
-
-  const submitHandler = async (e) => {
-    e.preventDefault();
-
-    // if (keyword) {
-    //   history.push(`/users/search/${keyword}/page/1`);
-    // }
-  };
 
   const deleteHandler = async (id) => {
     if (window.confirm('Delete the item?')) {
@@ -61,14 +53,14 @@ export default function ShowUserScreen() {
           <div className="card-body">
             <div className="row mb-2">
               <div className="col">
-                <LinkContainer to={'/users/new'}>
+                <LinkContainer to={'/dashboard/adduser'}>
                   <Button variant="primary" className="btn">
                     Add New User
                   </Button>
                 </LinkContainer>
               </div>
               <div className="col-auto">
-                <Form onSubmit={submitHandler} inline>
+                {/* <Form onSubmit={submitHandler} inline>
                   <Form.Control
                     type="text"
                     name="q"
@@ -83,7 +75,7 @@ export default function ShowUserScreen() {
                   >
                     Search
                   </Button>
-                </Form>
+                </Form> */}
               </div>
             </div>
             <table id="allUsers" className="table table-bordered table-striped">
