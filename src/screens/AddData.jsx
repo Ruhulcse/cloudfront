@@ -137,7 +137,7 @@ export default function AddData({ history }) {
     let userData = JSON.parse(localStorage.getItem('user'));
     let userName = userData.name;
     let createdDate = new Date().toISOString().split('T')[0];
-    let replaid = reply!==0?"Yes":"None";
+    let replaid = reply!=="0"?"Yes":"No";
     const Formdata = {
       domain,
       userName,

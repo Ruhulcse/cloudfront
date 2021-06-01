@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import Meta from '../components/Meta';
-// import Message from '../components/Message';
-// import { config } from '../utils/tokenConfig';
-// import Loader from '../components/Loader';
 import { Link } from 'react-router-dom';
 import { config, URL } from '../utils/config';
 import Dashboard from './Dashboard';
@@ -299,22 +295,6 @@ function UpdateDataScreen({ location, history }) {
                                 <option>8</option>
                                 <option>9</option>
                                 <option>10</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="form-group">
-                              <label htmlFor="District">Replied</label>
-                              <select
-                                className="form-control select2"
-                                style={{ width: '100%' }}
-                                value={replaid}
-                                onChange={(e) => setReplaid(e.target.value)}
-                              >
-                                <option selected="selected">None</option>
-                                <option>Yes</option>
-                                <option>No</option>
-                                <option>None</option>
                               </select>
                             </div>
                           </div>

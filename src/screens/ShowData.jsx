@@ -359,26 +359,27 @@ export default function ShowData() {
                       <td>{user.email}</td>
                       <td>
                         <a href={user.contactUrl} target="blank">
-                          Link
+                        {user.contactUrl.substring(0,14)+'...'}
                         </a>
                       </td>
                       <td>
                         <a href={user.fbUrl} target="blank">
-                          Link
+                        {user.fbUrl.substring(0,14)+'...'}
                         </a>
                       </td>
                       <td>
                         <a href={user.igUrl} target="blank">
-                          Link
+                        {user.igUrl.substring(0,14)+'...'}
                         </a>
                       </td>
                       <td>
                         <a href={user.twitterUrl} target="blank">
-                          Link
+                        {user.twitterUrl.substring(0,14)+'...'}
                         </a>
                       </td>
                       <td>{user.phone}</td>
-                      <td>
+                      {userData.role !== 'restricted' && (
+                        <td>
                         <LinkContainer to={`/updatedata?id=${user._id}`}>
                           <Button
                             variant="warning"
@@ -395,6 +396,8 @@ export default function ShowData() {
                           <i className="fas fa-trash-alt"></i>
                         </Button>
                       </td>
+                      )}
+                      
                     </tr>
                   ))}
                 </tbody>
