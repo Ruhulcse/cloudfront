@@ -77,6 +77,7 @@ export default function AddData({ history }) {
         ? false
         : true;
     });
+    console.log(csvData)
   };
 
   const isInvalid = domain === '';
@@ -90,46 +91,61 @@ export default function AddData({ history }) {
 
   let formData = {};
 
-  const addBatchData = () => {
-    csvData?.map(async (item) => {
-      formData = {
-        domain: item.domain,
-        companyName: item.companyName,
-        email: item.email,
-        contactUrl: item.contactUrl,
-        fbUrl: item.fbUrl,
-        igUrl: item.igUrl,
-        twitterUrl: item.twitterUrl,
-        phone: item.phone,
-        promoMsg: item.promoMsg,
-        replaid: item.replaid,
-        reply: item.reply,
-        status: item.status,
-        interest: item.interest,
-        countryCode: item.countryCode,
-        storeTheme: item.storeTheme,
-        storeCreated: item.storeCreated,
-        productSold: item.productSold,
-        rank: item.rank,
-        siteEearning: item.siteEearning,
-        followup: item.followup,
-        extraNote: item.extraNote,
-        userName: item.userName,
-      };
+  const addBatchData = async () => {
+    console.log(csvData)
+   let payLoad ={};
+   payLoad.csv = csvData
+    try {
+      const { data } = await axios.post(
+        `${URL}api/v1/data/batch`,
+        payLoad,
+        config
+      );
 
-      try {
-        const { data } = await axios.post(
-          `${URL}api/v1/data/batch`,
-          formData,
-          config
-        );
+      setMessage('Csv data added successfully');
+      // history.push('/showData');
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+    // csvData?.map(async (item) => {
+    //   formData = {
+    //     domain: item.domain,
+    //     companyName: item.companyName,
+    //     email: item.email,
+    //     contactUrl: item.contactUrl,
+    //     fbUrl: item.fbUrl,
+    //     igUrl: item.igUrl,
+    //     twitterUrl: item.twitterUrl,
+    //     phone: item.phone,
+    //     promoMsg: item.promoMsg,
+    //     replaid: item.replaid,
+    //     reply: item.reply,
+    //     status: item.status,
+    //     interest: item.interest,
+    //     countryCode: item.countryCode,
+    //     storeTheme: item.storeTheme,
+    //     storeCreated: item.storeCreated,
+    //     productSold: item.productSold,
+    //     rank: item.rank,
+    //     siteEearning: item.siteEearning,
+    //     followup: item.followup,
+    //     extraNote: item.extraNote,
+    //     userName: item.userName,
+    //   };
 
-        setMessage('Csv data added successfully');
-        // history.push('/showData');
-      } catch (error) {
-        setError(error.response.data.message);
-      }
-    });
+    //   try {
+    //     const { data } = await axios.post(
+    //       `${URL}api/v1/data/batch`,
+    //       formData,
+    //       config
+    //     );
+
+    //     setMessage('Csv data added successfully');
+    //     // history.push('/showData');
+    //   } catch (error) {
+    //     setError(error.response.data.message);
+    //   }
+    // });
   };
 
   const submitHandler = async (e) => {

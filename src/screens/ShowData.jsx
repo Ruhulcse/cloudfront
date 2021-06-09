@@ -58,6 +58,7 @@ export default function ShowData() {
             ? await axios.get(`${URL}api/v1/data`, config)
             : await axios.get(`${URL}api/v1/data/user/${id}`, config);
         // setPager(pager);
+        console.log(data);
         setPageOfItems(data?.data);
         setCheckData(data?.data);
         setLoading(false);
@@ -353,28 +354,28 @@ export default function ShowData() {
                 <tbody>
                   {pageOfItems?.map((user) => (
                     <tr key={user._id}>
-                      <td>{user.userName}</td>
-                      <td>{user.companyName}</td>
+                      <td>{user.username}</td>
+                      <td>{user.companyname}</td>
                       <td>{user.domain}</td>
                       <td>{user.email}</td>
                       <td>
-                        <a href={user.contactUrl} target="blank">
-                        {user.contactUrl.substring(0,14)+'...'}
+                        <a href={user.contacturl} target="blank">
+                        {user.contacturl?user.contacturl.substring(0,14)+'...':"null"}
                         </a>
                       </td>
                       <td>
-                        <a href={user.fbUrl} target="blank">
-                        {user.fbUrl.substring(0,14)+'...'}
+                        <a href={user.fburl} target="blank">
+                        {user.fburl?user.fburl.substring(0,14)+'...':"null"}
                         </a>
                       </td>
                       <td>
-                        <a href={user.igUrl} target="blank">
-                        {user.igUrl.substring(0,14)+'...'}
+                        <a href={user.igurl} target="blank">
+                        {user.igurl?user.igurl.substring(0,14)+'...':"null"}
                         </a>
                       </td>
                       <td>
-                        <a href={user.twitterUrl} target="blank">
-                        {user.twitterUrl.substring(0,14)+'...'}
+                        <a href={user.twitterurl} target="blank">
+                        {user.twitterurl?user.twitterurl.substring(0,14)+'...':"null"}
                         </a>
                       </td>
                       <td>{user.phone}</td>
