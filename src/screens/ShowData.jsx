@@ -21,7 +21,11 @@ export default function ShowData() {
   const [searchTerm, setSearchTerm] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [pageNumber, setPageNumber] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(0);
+  const [posts, setPosts] = useState([]);
   const userData = JSON.parse(localStorage.getItem('user'));
+  const pages = new Array(numberOfPages).fill(null).map((v,i)=>i);
 
   const submitDate = async (e) => {
     e.preventDefault();
@@ -31,19 +35,19 @@ export default function ShowData() {
     setPageOfItems(result);
   };
   useEffect(() => {
-    const fuse = new Fuse(pageOfItems, {
+    const fuse = new Fuse(posts, {
       keys: ['domain'],
     });
     const results = fuse.search(searchTerm).map(({ item }) => item);
 
     if (
-      pageOfItems.length > 0 &&
+      posts.length > 0 &&
       searchTerm.length >= 0 &&
       results.length > 0
     ) {
-      setPageOfItems(results);
+      setPosts(results);
     } else {
-      setPageOfItems(pageOfItems);
+      setPosts(posts);
     }
   }, [searchTerm]);
 
@@ -53,21 +57,23 @@ export default function ShowData() {
         setLoading(true);
         let user = JSON.parse(localStorage.getItem('user'));
         let id = user._id;
-        let data =
+        let {data} =
           user.role === 'admin'
-            ? await axios.get(`${URL}api/v1/data`, config)
+            ? await axios.get(`${URL}api/v1/data?page=${pageNumber}`, config)
             : await axios.get(`${URL}api/v1/data/user/${id}`, config);
         // setPager(pager);
-        console.log(data);
-        setPageOfItems(data?.data);
-        setCheckData(data?.data);
+        setPosts(data.data);
+        setNumberOfPages(data.totalPages);
+        // setCheckData(data?.data);
         setLoading(false);
+        console.log(posts)
+        console.log(numberOfPages)
       }
       fetchUserData();
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [pageNumber]);
 
   const deleteHandler = async (id) => {
     if (window.confirm('Delete the item?')) {
@@ -114,11 +120,13 @@ export default function ShowData() {
           </div>
           {/* /.container-fluid */}
         </section>
-
         <div className="card">
           {loading ? (
             'Loading...'
           ) : (
+            // <div>
+            //   <h1>you are right {posts.length}</h1>
+            // </div>
             <div className="card-body">
               <div className="row mb-2">
                 <div className="col">
@@ -352,7 +360,7 @@ export default function ShowData() {
                 </thead>
 
                 <tbody>
-                  {pageOfItems?.map((user) => (
+                  {posts?.map((user) => (
                     <tr key={user._id}>
                       <td>{user.username}</td>
                       <td>{user.companyname}</td>
@@ -403,7 +411,13 @@ export default function ShowData() {
                   ))}
                 </tbody>
               </table>
-              {/* <Paginate pager={pager} /> */}
+              <div>
+              {pages.map((pageIndex) => (
+              <button key={pageIndex} onClick={() => setPageNumber(pageIndex)}>
+                {pageIndex + 1}
+              </button>
+            ))}
+              </div>
             </div>
           )}
         </div>
