@@ -26,6 +26,7 @@ export default function ShowData() {
   const [posts, setPosts] = useState([]);
   const userData = JSON.parse(localStorage.getItem('user'));
   const pages = new Array(numberOfPages).fill(null).map((v,i)=>i);
+  const test = [1,2,3,4,5];
 
   const submitDate = async (e) => {
     e.preventDefault();
@@ -94,7 +95,13 @@ export default function ShowData() {
     );
     setPageOfItems(filteredItems);
   };
-
+  const gotoPrevious = () => {
+    setPageNumber(Math.max(0,pageNumber-1));
+    console.log(pageNumber)
+  }
+  const gotoNext = () => {
+    setPageNumber(Math.min(numberOfPages-1,pageNumber+1));
+  }
   // if (loading) return 'Loading...';
 
   return (
@@ -412,12 +419,14 @@ export default function ShowData() {
                 </tbody>
               </table>
               <div>
-              {pages.map((pageIndex) => (
+              <button onClick={gotoPrevious}>Previous</button>
+              {test.map((pageIndex) => (
               <button key={pageIndex} onClick={() => setPageNumber(pageIndex)}>
-                {pageIndex + 1}
+                {pageIndex+1}
               </button>
             ))}
               </div>
+              <button onClick={gotoNext}>next</button>
             </div>
           )}
         </div>
