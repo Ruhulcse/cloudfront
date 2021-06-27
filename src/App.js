@@ -8,6 +8,7 @@ import AddData from "./screens/AddData";
 import ShowData from "./screens/ShowData";
 import MainChart from "./screens/MainChart";
 import UpdateDataScreen from "./screens/UpdateDataScreen";
+import Show from "./screens/Show";
 function App() {
   return (
     <>
@@ -20,7 +21,7 @@ function App() {
         <Route exact path="/dashboard/adduser" component={Adduser} />
         <Route exact path="/dashboard/userprofile" component={UserProfile} />
         <Route exact path="/dashboard/addData" component={AddData} />
-        <Route exact path="/showData" component={ShowData} />
+        <Route exact path="/showData" component={Show} />
       </Router>
     </>
   );
