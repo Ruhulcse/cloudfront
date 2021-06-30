@@ -6,28 +6,28 @@ import Dashboard from './Dashboard';
 
 function UpdateDataScreen({ location, history }) {
   const [domain, setDomain] = useState('');
-  const [companyName, setCompanyName] = useState('');
+  const [companyname, setCompanyName] = useState('');
   const [email, setEmail] = useState('');
-  const [contactUrl, setContactUrl] = useState('');
-  const [fbUrl, setFbUrl] = useState('');
-  const [igUrl, setIgUrl] = useState('');
-  const [twitterUrl, setTwitterUrl] = useState('');
+  const [contacturl, setContactUrl] = useState('');
+  const [fburl, setFbUrl] = useState('');
+  const [igurl, setIgUrl] = useState('');
+  const [twitterurl, setTwitterUrl] = useState('');
   const [phone, setPhone] = useState('');
-  const [promoMsg, setPromoMsg] = useState('0');
+  const [promomsg, setPromoMsg] = useState('0');
   const [replaid, setReplaid] = useState('None');
   const [reply, setReply] = useState('0');
   const [status, setStatus] = useState('None');
   const [interest, setInterest] = useState('None');
-  const [countryCode, setCountryCode] = useState('');
-  const [storeTheme, setStoreTheme] = useState('');
-  const [storeCreated, setStoreCreated] = useState('');
-  const [productSold, setProductSold] = useState('');
+  const [countrycode, setCountryCode] = useState('');
+  const [storetheme, setStoreTheme] = useState('');
+  const [storecreated, setStoreCreated] = useState('');
+  const [productsold, setProductSold] = useState('');
   const [rank, setRank] = useState('');
-  const [siteEearning, setSiteEearning] = useState('');
+  const [siteearning, setSiteEearning] = useState('');
   const [followup, setFollowup] = useState('None');
-  const [extraNote, setExtraNote] = useState('');
+  const [extranote, setExtraNote] = useState('');
   const [error, setError] = useState(null);
-  const [isLoading, setIsloading] = useState(false);
+  const [isloading, setIsloading] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   let id = searchParams.get('id');
@@ -38,26 +38,27 @@ function UpdateDataScreen({ location, history }) {
         setIsloading(true);
         let { data } = await axios.get(`${URL}api/v1/data/${id}`, config);
         setDomain(data.domain);
-        setCompanyName(data.companyName);
+        setCompanyName(data.companyname);
         setEmail(data.email);
-        setContactUrl(data.contactUrl);
-        setFbUrl(data.fbUrl);
-        setIgUrl(data.igUrl);
-        setTwitterUrl(data.twitterUrl);
+        setContactUrl(data.contacturl);
+        setFbUrl(data.fburl);
+        setIgUrl(data.igurl);
+        setTwitterUrl(data.twitterurl);
         setPhone(data.phone);
-        setPromoMsg(data.promoMsg);
+        setPromoMsg(data.promomsg);
         setReplaid(data.replaid);
         setReply(data.reply);
         setStatus(data.status);
+        console.log(data.status)
         setInterest(data.interest);
-        setCountryCode(data.countryCode);
-        setStoreTheme(data.storeTheme);
-        setStoreCreated(data.storeCreated);
-        setProductSold(data.productSold);
+        setCountryCode(data.countrycode);
+        setStoreTheme(data.storetheme);
+        setStoreCreated(data.storecreated);
+        setProductSold(data.productsold);
         setRank(data.rank);
-        setSiteEearning(data.siteEearning);
+        setSiteEearning(data.siteearning);
         setFollowup(data.followup);
-        setExtraNote(data.extraNote);
+        setExtraNote(data.extranote);
 
         setIsloading(false);
       }
@@ -70,26 +71,26 @@ function UpdateDataScreen({ location, history }) {
     e.preventDefault();
     const userData = {
       domain,
-      companyName,
+      companyname,
       email,
-      contactUrl,
-      fbUrl,
-      igUrl,
-      twitterUrl,
+      contacturl,
+      fburl,
+      igurl,
+      twitterurl,
       phone,
-      promoMsg,
+      promomsg,
       replaid,
       reply,
       status,
       interest,
-      countryCode,
-      storeTheme,
-      storeCreated,
-      productSold,
+      countrycode,
+      storetheme,
+      storecreated,
+      productsold,
       rank,
-      siteEearning,
+      siteearning,
       followup,
-      extraNote,
+      extranote,
     };
 
     try {
@@ -144,7 +145,7 @@ function UpdateDataScreen({ location, history }) {
                   {/* {error && <Message>{error}</Message>} */}
                   {/* /.card-header */}
                   {/* form start */}
-                  {isLoading ? (
+                  {isloading ? (
                     'Loading...'
                   ) : (
                     <form onSubmit={submitHandler}>
@@ -172,7 +173,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="companyname"
                                 placeholder="Enter Company name"
-                                value={companyName}
+                                value={companyname}
                                 onChange={(e) => setCompanyName(e.target.value)}
                               />
                             </div>
@@ -203,7 +204,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="occupation"
                                 placeholder="Enter contact page url"
-                                value={contactUrl}
+                                value={contacturl}
                                 onChange={(e) => setContactUrl(e.target.value)}
                               />
                             </div>
@@ -221,7 +222,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="mobileNumber"
                                 placeholder="Enter Facebook Page URL"
-                                value={fbUrl}
+                                value={fburl}
                                 onChange={(e) => setFbUrl(e.target.value)}
                               />
                             </div>
@@ -234,7 +235,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="fathersName"
                                 placeholder="Enter IG page URL"
-                                value={igUrl}
+                                value={igurl}
                                 onChange={(e) => setIgUrl(e.target.value)}
                               />
                             </div>
@@ -252,7 +253,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="fathersMobile"
                                 placeholder="Enter Twitter URL"
-                                value={twitterUrl}
+                                value={twitterurl}
                                 onChange={(e) => setTwitterUrl(e.target.value)}
                               />
                             </div>
@@ -281,7 +282,7 @@ function UpdateDataScreen({ location, history }) {
                               <select
                                 className="form-control select2"
                                 style={{ width: '100%' }}
-                                value={promoMsg}
+                                value={promomsg}
                                 onChange={(e) => setPromoMsg(e.target.value)}
                               >
                                 <option selected="selected">None</option>
@@ -333,7 +334,7 @@ function UpdateDataScreen({ location, history }) {
                                 value={status}
                                 onChange={(e) => setStatus(e.target.value)}
                               >
-                                <option selected="selected">None</option>
+                                <option selected="selected">{status}</option>
                                 <option>Banned</option>
                                 <option>Sold</option>
                                 <option>Active</option>
@@ -370,7 +371,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="refThana"
                                 placeholder="Enter Country Code"
-                                value={countryCode}
+                                value={countrycode}
                                 onChange={(e) => setCountryCode(e.target.value)}
                               />
                             </div>
@@ -386,7 +387,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="fb"
                                 placeholder="Enter store theme"
-                                value={storeTheme}
+                                value={storetheme}
                                 onChange={(e) => setStoreTheme(e.target.value)}
                               />
                             </div>
@@ -400,7 +401,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 type="date"
                                 id="dateOfBirth"
-                                value={storeCreated}
+                                value={storecreated}
                                 onChange={(e) =>
                                   setStoreCreated(e.target.value)
                                 }
@@ -418,7 +419,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="fb"
                                 placeholder="Enter product sold"
-                                value={productSold}
+                                value={productsold}
                                 onChange={(e) => setProductSold(e.target.value)}
                               />
                             </div>
@@ -447,7 +448,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="fb"
                                 placeholder="Enter site earnings "
-                                value={siteEearning}
+                                value={siteearning}
                                 onChange={(e) =>
                                   setSiteEearning(e.target.value)
                                 }
@@ -481,7 +482,7 @@ function UpdateDataScreen({ location, history }) {
                                 className="form-control"
                                 id="fb"
                                 placeholder="Write extra notes"
-                                value={extraNote}
+                                value={extranote}
                                 onChange={(e) => setExtraNote(e.target.value)}
                               />
                             </div>
