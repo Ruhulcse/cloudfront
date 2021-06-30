@@ -366,7 +366,7 @@ function Show({ location, history }) {
                         {pageOfItems.map((user) => {
                             return (
                             <tr key={user._id}>
-                                <td>{user.username}</td>
+                            <td>{user.useremail}</td>
                             <td>{user.companyname}</td>
                             <td>{user.domain}</td>
                             <td>{user.email}</td>

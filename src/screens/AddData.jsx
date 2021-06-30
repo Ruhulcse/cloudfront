@@ -92,7 +92,7 @@ export default function AddData({ history }) {
   let formData = {};
 
   const addBatchData = async () => {
-    console.log(csvData)
+   console.log(csvData)
    let payLoad ={};
    payLoad.csv = csvData
     try {
@@ -101,9 +101,7 @@ export default function AddData({ history }) {
         payLoad,
         config
       );
-
       setMessage('Csv data added successfully');
-      // history.push('/showData');
     } catch (error) {
       setError(error.response.data.message);
     }
