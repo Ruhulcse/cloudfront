@@ -8,10 +8,11 @@ import { Link } from "react-router-dom";
 import Fuse from 'fuse.js';
 import { CSVLink } from 'react-csv';
 import Dashboard from "./Dashboard";
+import Update from "./Update";
 
 function Show({ location, history }) {
     const [loading, setLoading] = useState(false);
-    const [promoMsg, setPromoMsg] = useState('');
+    const [promomsg, setPromomsg] = useState('');
     const [replied, setReplied] = useState('');
     const [reply, setReply] = useState('');
     const [status, setStatus] = useState('');
@@ -25,6 +26,8 @@ function Show({ location, history }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [updateid, setUpdateID] = useState('');
+    const [here, setHere] = useState(false);
     const userData = JSON.parse(localStorage.getItem('user'));
 
     //filter by date
@@ -57,7 +60,7 @@ function Show({ location, history }) {
     const filterApplied = () => {
         let filteredItems = pageOfItems?.filter(
           (item) =>
-            item.promoMsg === promoMsg ||
+            item.promomsg === promomsg ||
             item.replaid === replied ||
             item.reply === reply ||
             item.interest === interest ||
@@ -73,6 +76,10 @@ function Show({ location, history }) {
           window.location.reload();
         }
       };
+      const updateHere = async (id) => {
+          setHere(!here);
+          setUpdateID(id);
+      }
     useEffect(() => {
         try {
           async function fetchMedicalData() {
@@ -219,8 +226,8 @@ function Show({ location, history }) {
                                     <select
                                     className="form-control select2"
                                     style={{ width: '100%' }}
-                                    value={promoMsg}
-                                    onChange={(e) => setPromoMsg(e.target.value)}
+                                    value={promomsg}
+                                    onChange={(e) => setPromomsg(e.target.value)}
                                     >
                                     <option selected="selected">-</option>
                                     <option>None</option>
@@ -344,12 +351,13 @@ function Show({ location, history }) {
                             </>
                         </div>
                     </div>
+                    {here&&<Update id={updateid}/>}
                     <table
                         id="allMedicalData"
                         className="table table-bordered table-striped"
                     >
                         <thead>
-                        <tr className="bg-dark">
+                        <tr className="bg-gray">
                             <th>Added by</th>
                             <th>Company Name</th>
                             <th>Domain</th>
@@ -357,8 +365,8 @@ function Show({ location, history }) {
                             <th>Contact</th>
                             <th>Facebook</th>
                             <th>Instagram</th>
-                            <th>Twitter</th>
-                            <th>Phone</th>
+                            <th>Promo</th>
+                            <th>Reply</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -386,11 +394,9 @@ function Show({ location, history }) {
                                 </a>
                             </td>
                             <td>
-                                <a href={user.twitterurl} target="blank">
-                                {user.twitterurl?user.twitterurl.substring(0,14)+'...':"null"}
-                                </a>
+                                {user.promomsg}
                             </td>
-                            <td>{user.phone}</td>
+                            <td>{user.reply}</td>
                             <td>
                                 <LinkContainer to={`/updatedata?id=${user._id}`}>
                                 <Button
@@ -406,6 +412,13 @@ function Show({ location, history }) {
                                 onClick={() => deleteHandler(user._id)}
                                 >
                                 <i className="fas fa-trash-alt"></i>
+                                </Button>
+                                <Button
+                                variant="danger"
+                                className="btn-sm"
+                                onClick={() => updateHere(user._id)}
+                                >
+                                <i className="fas fa-pen"></i>
                                 </Button>
                             </td>
                             </tr>
